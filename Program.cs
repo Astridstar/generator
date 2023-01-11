@@ -3,6 +3,7 @@
 
 using data;
 using configurations;
+using parser;
 using Microsoft.Extensions.Configuration;
 
 internal class Program
@@ -26,13 +27,19 @@ internal class Program
 
         Console.WriteLine($"Hello, World! {appConfig.Environment.ToString()}");
 
+        // var addressesBuilder = new ConfigurationBuilder().AddJsonFile($"addresses.json", true, true);
+
+
         PersonDataset _personDataset = new();
-        _personDataset.loadChineseNamesDataset(appConfig.ChineseNamesCsv);     
-        _personDataset.loadIndianNamesDataset(appConfig.IndianNamesCsv);     
-        _personDataset.loadMalayNamesDataset(appConfig.MalayNamesCsv);     
+        _personDataset.loadChineseNamesDataset(appConfig.ChineseNamesCsv);
+        _personDataset.loadIndianNamesDataset(appConfig.IndianNamesCsv);
+        _personDataset.loadMalayNamesDataset(appConfig.MalayNamesCsv);
         _personDataset.combine();
 
         _personDataset.loadFamilyConfig(appConfig.FamilySettingsCsv);
 
+        // Load the address
+        AddressesParser parser = new();
+        IEnumerable<string> address = parser.parse(appConfig.AddressesJsonFile);
     }
 }

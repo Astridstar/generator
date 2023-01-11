@@ -1,0 +1,50 @@
+{
+    "family": [
+    {
+        "Name": "Tan",
+        "Hierarchy": [
+            {
+                "id": 1,
+                "father_surname": "Tan",
+                "mother_surname": "Bai",
+                "spouse_surname": "Wu",
+                "num_of_brothers": 2,
+                "num_of_sisters": 2,
+                "parent_family": -1
+            },
+            {
+                "id": 2,
+                "father_surname": "Tan",
+                "mother_surname": "Wu",
+                "spouse_surname": "Bai",
+                "num_of_brothers": 1,
+                "num_of_sisters": 1,
+                "parent_family": 1
+            }
+        ]
+    },
+    {
+        "Name": "Tan",
+        "Hierarchy": [
+            {
+                "id": 1,
+                "father_surname": "Tan",
+                "mother_surname": "Bai",
+                "spouse_surname": "Wu",
+                "num_of_brothers": 2,
+                "num_of_sisters": 2,
+                "parent_family": -1
+            },
+            {
+                "id": 2,
+                "father_surname": "Tan",
+                "mother_surname": "Wu",
+                "spouse_surname": "Wu",
+                "num_of_brothers": 1,
+                "num_of_sisters": 1,
+                "parent_family": 1
+            }
+        ]
+
+    }]
+}
