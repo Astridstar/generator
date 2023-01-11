@@ -3,7 +3,7 @@ namespace data;
 using CsvHelper;
 using System.Globalization;
 
-internal class PersonDataset 
+internal class PersonDataset
 {
     IEnumerable<PersonName>? _chineseNamesDataset = null;
     IEnumerable<PersonName>? _indianNamesCsv = null;
@@ -29,25 +29,25 @@ internal class PersonDataset
         StreamReader reader = new StreamReader(filename);
         {
             CsvReader csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-            if(csv == null)
+            if (csv == null)
                 return;
 
             csv.Context.RegisterClassMap<FamilyConfigMap>();
             _familyConfig = csv.GetRecords<FamilyConfig>().ToList();
-        }       
+        }
     }
 
     public void combine()
     {
-        if( _chineseNamesDataset != null )
+        if (_chineseNamesDataset != null)
         {
             _personNames = _personNames.Concat(_chineseNamesDataset).ToList();
         }
-        else if ( _indianNamesCsv != null )
+        else if (_indianNamesCsv != null)
         {
             _personNames = _personNames.Concat(_indianNamesCsv).ToList();
         }
-        else if ( _malayNamesCsv != null )
+        else if (_malayNamesCsv != null)
         {
             _personNames = _personNames.Concat(_malayNamesCsv).ToList();
         }
@@ -62,7 +62,7 @@ internal class PersonDataset
         StreamReader reader = new StreamReader(filename);
         {
             CsvReader csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-            if(csv == null)
+            if (csv == null)
                 return null;
 
             csv.Context.RegisterClassMap<PersonMap>();
