@@ -8,6 +8,8 @@ namespace configurations
         private string _malayNamesCsv = "";
         private string _familySettingsCsv = "";
         private string _addressesJsonFile = "";
+        private string _randHumanPropDataset = "";
+        private string _countriesCsv = "";
         private List<string> _addressesJsonFiles = new();
 
         public string Environment
@@ -40,6 +42,18 @@ namespace configurations
         {
             get => _addressesJsonFiles;
             set => _addressesJsonFiles = value;
+        }
+
+        public string RandHumanPropCsv
+        {
+            get => _randHumanPropDataset;
+            set => _randHumanPropDataset = value;
+        }
+
+        public string CountriesCsv
+        {
+            get => _countriesCsv;
+            set => _countriesCsv = value;
         }
 
         public string AddressesJsonFile

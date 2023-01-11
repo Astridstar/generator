@@ -13,7 +13,6 @@ internal class Program
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
         var builder = new ConfigurationBuilder()
             .AddJsonFile($"appsettings.json", true, true)
-            //    .AddJsonFile($"appsettings.{environment}.json", true, true)
             .AddEnvironmentVariables();
         var configurationRoot = builder.Build();
 
@@ -27,19 +26,26 @@ internal class Program
 
         Console.WriteLine($"Hello, World! {appConfig.Environment.ToString()}");
 
-        // var addressesBuilder = new ConfigurationBuilder().AddJsonFile($"addresses.json", true, true);
-
-
         PersonDataset _personDataset = new();
         _personDataset.loadChineseNamesDataset(appConfig.ChineseNamesCsv);
         _personDataset.loadIndianNamesDataset(appConfig.IndianNamesCsv);
         _personDataset.loadMalayNamesDataset(appConfig.MalayNamesCsv);
         _personDataset.combine();
 
-        _personDataset.loadFamilyConfig(appConfig.FamilySettingsCsv);
+        //_personDataset.loadFamilyConfig(appConfig.FamilySettingsCsv);
+
+        #region Loading Random Human properties such as dob, mobile, email, nric, passport
+        RandHumanPropDataset randomHumanPropDs = new();
+        randomHumanPropDs.load(appConfig.RandHumanPropCsv);
+        #endregion
+
+        #region Loading countries
+        CountryDataset countryDs = new();
+        countryDs.load(appConfig.CountriesCsv);
+        #endregion
 
         // Load the address
-        #region Generating Addresses
+        #region Loading and generating Addresses
         try
         {
             AddressesParser parser = new();
