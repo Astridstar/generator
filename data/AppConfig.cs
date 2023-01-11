@@ -8,6 +8,7 @@ namespace configurations
         private string _malayNamesCsv = "";
         private string _familySettingsCsv = "";
         private string _addressesJsonFile = "";
+        private List<string> _addressesJsonFiles = new();
 
         public string Environment
         {
@@ -33,6 +34,12 @@ namespace configurations
         {
             get => _familySettingsCsv;
             set => _familySettingsCsv = value;
+        }
+
+        public List<string> AddressesJsonFiles
+        {
+            get => _addressesJsonFiles;
+            set => _addressesJsonFiles = value;
         }
 
         public string AddressesJsonFile

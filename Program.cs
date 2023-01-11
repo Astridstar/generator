@@ -39,7 +39,22 @@ internal class Program
         _personDataset.loadFamilyConfig(appConfig.FamilySettingsCsv);
 
         // Load the address
-        AddressesParser parser = new();
-        IEnumerable<string> address = parser.parse(appConfig.AddressesJsonFile);
+        #region Generating Addresses
+        try
+        {
+            AddressesParser parser = new();
+            List<AddressesParser.AddressRecord> addresses = new();
+            foreach (string jsonfile in appConfig.AddressesJsonFiles)
+            {
+                Console.WriteLine("Processing address configuration file {0}", jsonfile);
+                addresses.AddRange(parser.parse(jsonfile));
+            }
+            parser.generateCsv("./config/addresses-generated.csv", addresses);
+        }
+        catch (FileNotFoundException e)
+        {
+            Console.WriteLine(e);
+        }
+        #endregion
     }
 }
