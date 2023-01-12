@@ -23,16 +23,24 @@ class AddressesParser
     private readonly string _lvl2Token = "docs";
     private readonly string _addressToken = "address_s";
     private readonly string _postalCodeToken = "postal_code_s";
+    private List<AddressRecord> addresses = new();
+    private int _addressIndex = 0;
 
     public AddressesParser()
     {
     }
 
+    public void getNextAddress(out string addr, out string postal)
+    {
+        if (_addressIndex >= addresses.Count)
+            _addressIndex = 0;
+
+        addr = addresses[_addressIndex].Address;
+        postal = addresses[_addressIndex].Postal;
+    }
+
     public IEnumerable<AddressRecord> parse(string filename)
     {
-        //JObject o1 = JObject.Parse(File.ReadAllText(@filename));
-
-        List<AddressRecord> addresses = new();
         // read JSON directly from a file
         using (StreamReader file = File.OpenText(@filename))
         using (JsonTextReader reader = new JsonTextReader(file))
@@ -46,20 +54,22 @@ class AddressesParser
                     //JToken lvl2token = lvl1token.SelectToken(_lvl2Token);
                     IEnumerable<JToken>? children = lvl1token.SelectToken(_lvl2Token);
 
-                    if (children != null)
+                    if (children == null)
                     {
-                        foreach (JToken child in children)
-                        {
-                            if (child == null)
-                            {
-                                continue;
-                            }
-                            string addrToken = child.SelectToken(_addressToken).Value<string>();
-                            string postToken = child.SelectToken(_postalCodeToken).Value<string>();
-                            Console.WriteLine("{0}, {1}", addrToken, postToken);
-                            addresses.Add(new AddressRecord(addrToken, postToken));
-                        }
+                        return addresses;
                     }
+                    foreach (JToken child in children)
+                    {
+                        if (child == null)
+                        {
+                            continue;
+                        }
+                        string addrToken = child.SelectToken(_addressToken).Value<string>();
+                        string postToken = child.SelectToken(_postalCodeToken).Value<string>();
+                        Console.WriteLine("{0}, {1}", addrToken, postToken);
+                        addresses.Add(new AddressRecord(addrToken, postToken));
+                    }
+                    return addresses;
                 }
             }
         }

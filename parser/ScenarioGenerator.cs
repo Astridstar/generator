@@ -17,11 +17,14 @@ class ScenarioGenerator
     IEnumerable<string>? _scenarioIdWithFamilies;
     IEnumerable<string>? _scenarioEmployers;
 
+    AddressesParser _addressParser;
+
     RandHumanPropDataset _randHumanPropDs;
 
-    public ScenarioGenerator(ref RandHumanPropDataset randHumanPropDs)
+    public ScenarioGenerator(ref RandHumanPropDataset randHumanPropDs, ref AddressesParser parser)
     {
         _randHumanPropDs = randHumanPropDs;
+        _addressParser = parser;
     }
     private void load(string filename)
     {
@@ -56,12 +59,11 @@ class ScenarioGenerator
         //2. Generate family
         generatePeopleInScenario();
 
-
-
         //3. Generate vehicle
         generateVehiclesInScenario();
 
         //4. Generate employer
+
         //5. Generate friendly
         //6. Generate blacklisted person
         //7. Generate blacklisted vehicle
@@ -69,7 +71,8 @@ class ScenarioGenerator
 
         generateDefaltPeopleRecords();
 
-        generatePeopleHubCsv();
+        // Now generate the CSV data
+        generatePeopleHubCsv(); // ICA PeopleHub
         return true;
     }
 
@@ -77,8 +80,11 @@ class ScenarioGenerator
     {
         foreach (ScenarioRecord record in _scenarioRecords)
         {
+            string addr = "";
+            string post = "":
+            _addressParser.getNextAddress(out addr, out post);
             _peopleHub.Add(record.id,
-            new PersonRecord(record, _randHumanPropDs.getNextEmail(), "", _randHumanPropDs.getNextMobileNumber()));
+            new PersonRecord(record, addr, post, _randHumanPropDs.getNextEmail(), "", _randHumanPropDs.getNextMobileNumber()));
         }
 
         _scenarioVehiclesPlate = from person in _peopleHub.Values

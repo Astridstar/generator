@@ -51,9 +51,9 @@ internal class Program
 
         // Load the address
         #region Loading and generating Addresses
+        AddressesParser parser = new();
         try
         {
-            AddressesParser parser = new();
             List<AddressesParser.AddressRecord> addresses = new();
             foreach (string jsonfile in appConfig.AddressesJsonFiles)
             {
@@ -69,7 +69,7 @@ internal class Program
         #endregion
 
         #region Load scenario and gen data
-        ScenarioGenerator generator = new(ref randomHumanPropDs);
+        ScenarioGenerator generator = new(ref randomHumanPropDs, ref parser);
         generator.generate(appConfig.ScenarioCsv);
         #endregion
     }

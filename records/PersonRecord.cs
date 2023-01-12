@@ -86,7 +86,7 @@ class PersonRecord
         nameof(child3_id));
     }
 
-    public PersonRecord(ScenarioRecord data, string email1, string email2, string mobile)
+    public PersonRecord(ScenarioRecord data, string addr, string postal, string email1, string email2, string mobile)
     {
         this.sn = data.sn;
         this.gender = data.gender;
@@ -99,9 +99,9 @@ class PersonRecord
         this.phone2 = "";
         this.fax = "";
         this.id = data.id;
-        this.address1 = data.address;
+        this.address1 = String.IsNullOrEmpty(data.address) ? addr : data.address;
         this.address2 = "";
-        this.postcode = data.postal;
+        this.postcode = String.IsNullOrEmpty(data.postal) ? postal : data.postal;
         this.citizenship = data.citizenship;
         this.nationality = data.nationality;
         this.company = data.employer;
@@ -109,14 +109,14 @@ class PersonRecord
         this.car_plate = data.vehicle_plate;
         this.deceased = data.deceased;
         this.marital = data.marital;
-        this.father_id = data.father;//lookup
-        this.mother_id = data.mother;//lookup
-        this.spouse_id = data.spouse;//lookup
-        this.sibling1_id = data.sib1;//lookup
-        this.sibling2_id = data.sib2;//lookup
-        this.sibling3_id = data.sib3;//lookup
-        this.child1_id = data.child1;//lookup
-        this.child2_id = data.child2;//lookup
-        this.child3_id = data.child3;//lookup
+        this.father_id = data.father;//lookup - set the fullname first later then populate with the NRIC
+        this.mother_id = data.mother;//lookup - set the fullname first later then populate with the NRIC
+        this.spouse_id = data.spouse;//lookup - set the fullname first later then populate with the NRIC
+        this.sibling1_id = data.sib1;//lookup - set the fullname first later then populate with the NRIC
+        this.sibling2_id = data.sib2;//lookup - set the fullname first later then populate with the NRIC
+        this.sibling3_id = data.sib3;//lookup - set the fullname first later then populate with the NRIC
+        this.child1_id = data.child1;//lookup - set the fullname first later then populate with the NRIC
+        this.child2_id = data.child2;//lookup - set the fullname first later then populate with the NRIC
+        this.child3_id = data.child3;//lookup - set the fullname first later then populate with the NRIC
     }
 }
