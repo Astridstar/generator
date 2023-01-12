@@ -1,7 +1,6 @@
-using CsvHelper.Configuration;
-
 namespace data
 {
+    using CsvHelper.Configuration;
     internal class RandRecords
     {
         private string _nric = "";

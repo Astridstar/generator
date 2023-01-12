@@ -11,7 +11,7 @@ namespace configurations
         private string _randHumanPropDataset = "";
         private string _countriesCsv = "";
         private List<string> _addressesJsonFiles = new();
-
+        private string _scenarioCsv = "";
         public string Environment
         {
             get => _environment;
@@ -60,6 +60,12 @@ namespace configurations
         {
             get => _addressesJsonFile;
             set => _addressesJsonFile = value;
+        }
+
+        public string ScenarioCsv
+        {
+            get => _scenarioCsv;
+            set => _scenarioCsv = value;
         }
 
         public AppConfig()

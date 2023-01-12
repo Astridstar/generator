@@ -6,8 +6,13 @@ using configurations;
 using parser;
 using Microsoft.Extensions.Configuration;
 
+
 internal class Program
 {
+
+    public static readonly string ADDRESSES_CSV_FULLPATH_FILE = @"./config/addresses-generated.csv";
+    public static readonly string PEOPLE_HUB_CSV_FULLPATH_FILE = @"./config/icsPeopleHub.csv";
+
     private static void Main(string[] args)
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -55,12 +60,17 @@ internal class Program
                 Console.WriteLine("Processing address configuration file {0}", jsonfile);
                 addresses.AddRange(parser.parse(jsonfile));
             }
-            parser.generateCsv("./config/addresses-generated.csv", addresses);
+            parser.generateCsv(ADDRESSES_CSV_FULLPATH_FILE, addresses);
         }
         catch (FileNotFoundException e)
         {
             Console.WriteLine(e);
         }
+        #endregion
+
+        #region Load scenario and gen data
+        ScenarioGenerator generator = new(ref randomHumanPropDs);
+        generator.generate(appConfig.ScenarioCsv);
         #endregion
     }
 }
