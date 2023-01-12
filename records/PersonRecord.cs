@@ -86,16 +86,16 @@ class PersonRecord
         nameof(child3_id));
     }
 
-    public PersonRecord(ScenarioRecord data)
+    public PersonRecord(ScenarioRecord data, string email1, string email2, string mobile)
     {
         this.sn = data.sn;
         this.gender = data.gender;
         this.fullname = data.fullname;
-        this.email1 = "gen";
-        this.email2 = "";
+        this.email1 = email1;
+        this.email2 = email2;
         this.salutation = "";
         this.birthday = data.dob;
-        this.mobile = "gen";
+        this.mobile = mobile;
         this.phone2 = "";
         this.fax = "";
         this.id = data.id;
@@ -109,14 +109,14 @@ class PersonRecord
         this.car_plate = data.vehicle_plate;
         this.deceased = data.deceased;
         this.marital = data.marital;
-        this.father_id = data.father;
-        this.mother_id = data.mother;
-        this.spouse_id = data.spouse;
-        this.sibling1_id = data.sib1;
-        this.sibling2_id = data.sib2;
-        this.sibling3_id = data.sib3;
-        this.child1_id = data.child1;
-        this.child2_id = data.child2;
-        this.child3_id = data.child3;
+        this.father_id = data.father;//lookup
+        this.mother_id = data.mother;//lookup
+        this.spouse_id = data.spouse;//lookup
+        this.sibling1_id = data.sib1;//lookup
+        this.sibling2_id = data.sib2;//lookup
+        this.sibling3_id = data.sib3;//lookup
+        this.child1_id = data.child1;//lookup
+        this.child2_id = data.child2;//lookup
+        this.child3_id = data.child3;//lookup
     }
 }

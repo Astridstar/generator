@@ -13,6 +13,10 @@ class ScenarioGenerator
     Dictionary<string, PersonRecord> _peopleHub = new();
     List<ScenarioRecord> _scenarioRecords = new();
 
+    IEnumerable<string>? _scenarioVehiclesPlate;
+    IEnumerable<string>? _scenarioIdWithFamilies;
+    IEnumerable<string>? _scenarioEmployers;
+
     RandHumanPropDataset _randHumanPropDs;
 
     public ScenarioGenerator(ref RandHumanPropDataset randHumanPropDs)
@@ -49,10 +53,10 @@ class ScenarioGenerator
 
         #region Generate data
         //1. Generate people_hub
+        //2. Generate family
         generatePeopleInScenario();
 
-        //2. Generate family
-        formFamilyRelationsInScenario();
+
 
         //3. Generate vehicle
         generateVehiclesInScenario();
@@ -73,13 +77,65 @@ class ScenarioGenerator
     {
         foreach (ScenarioRecord record in _scenarioRecords)
         {
-            _peopleHub.Add(record.id, new PersonRecord(record));
+            _peopleHub.Add(record.id,
+            new PersonRecord(record, _randHumanPropDs.getNextEmail(), "", _randHumanPropDs.getNextMobileNumber()));
         }
+
+        _scenarioVehiclesPlate = from person in _peopleHub.Values
+                                 where !String.IsNullOrEmpty(person.car_plate)
+                                 select person.car_plate;
+
+        _scenarioIdWithFamilies = from person in _peopleHub.Values
+                                  where (!String.IsNullOrEmpty(person.father_id) ||
+                                         !String.IsNullOrEmpty(person.mother_id) ||
+                                         !String.IsNullOrEmpty(person.spouse_id) ||
+                                         !String.IsNullOrEmpty(person.sibling1_id) ||
+                                         !String.IsNullOrEmpty(person.sibling2_id) ||
+                                         !String.IsNullOrEmpty(person.sibling3_id) ||
+                                         !String.IsNullOrEmpty(person.child1_id) ||
+                                         !String.IsNullOrEmpty(person.child2_id) ||
+                                         !String.IsNullOrEmpty(person.child3_id))
+                                  select person.id;
+
+        formFamilyRelationsInScenario();
     }
 
     private void formFamilyRelationsInScenario()
     {
-        // for each person find the id of family members
+        if (_scenarioIdWithFamilies != null && _scenarioIdWithFamilies.Count() > 0 && _peopleHub != null)
+        {
+            // for each person find the id of family members
+            foreach (string id in _scenarioIdWithFamilies)
+            {
+                PersonRecord record = _peopleHub[id];
+                record.father_id = retrieveIdWithFullname(record.father_id, "father");
+                record.mother_id = retrieveIdWithFullname(record.mother_id, "mother");
+                record.spouse_id = retrieveIdWithFullname(record.spouse_id, "spouse");
+                record.sibling1_id = retrieveIdWithFullname(record.sibling1_id, "sibling-1");
+                record.sibling2_id = retrieveIdWithFullname(record.sibling2_id, "sibling-2");
+                record.sibling3_id = retrieveIdWithFullname(record.sibling3_id, "sibling-3");
+                record.child1_id = retrieveIdWithFullname(record.child1_id, "child-1");
+                record.child2_id = retrieveIdWithFullname(record.child2_id, "child-2");
+                record.child3_id = retrieveIdWithFullname(record.child3_id, "child-3");
+            }
+        }
+    }
+
+    private string retrieveIdWithFullname(string fullname, string relationship)
+    {
+        String retirevedId = "";
+        try
+        {
+            if (!String.IsNullOrEmpty(fullname))
+                retirevedId = _peopleHub.Values.Where(person => String.Equals(person.fullname, fullname))
+                                                    .Single().id;
+        }
+        catch (System.Exception)
+        {
+            Console.WriteLine("Unable to find record with {0}'s fullname {1}", relationship, fullname);
+            retirevedId = "";
+        }
+        return retirevedId;
     }
     private void generateVehiclesInScenario()
     {
