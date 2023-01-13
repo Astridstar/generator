@@ -13,6 +13,7 @@ namespace configurations
         private List<string> _addressesJsonFiles = new();
         private string _scenarioCsv = "";
         private string _vehicleMakeModelCsv = "";
+        private string _acraDataCsv = "";
         public string Environment
         {
             get => _environment;
@@ -72,6 +73,12 @@ namespace configurations
         {
             get => _vehicleMakeModelCsv;
             set => _vehicleMakeModelCsv = value;
+        }
+
+        public string AcraDataCsv
+        {
+            get => _acraDataCsv;
+            set => _acraDataCsv = value;
         }
         public AppConfig()
         {

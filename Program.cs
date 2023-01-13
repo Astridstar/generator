@@ -50,9 +50,14 @@ internal class Program
         countryDs.load(appConfig.CountriesCsv);
         #endregion
 
-        #region Loading countries
+        #region Loading Vehicle Make & Model list
         VehicleMakeModelDataset vehicleDs = new();
         vehicleDs.load(appConfig.VehicleMakeModelCsv);
+        #endregion        
+
+        #region Loading Vehicle Make & Model list
+        ArcaDataset arcaDs = new();
+        arcaDs.load(appConfig.AcraDataCsv);
         #endregion        
 
         // Load the address

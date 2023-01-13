@@ -30,7 +30,7 @@ class VehicleRecord
     {
         this.make = genDs.make;
         this.model = genDs.Model;
-        this.registration_dt = "";
+        this.registration_dt = _generator.randomDateTime().ToString("yyyy-MM-dd");
         this.is_registered = "1";
         this.deregistration_dt = "";
         this.is_foreign_car = "0";

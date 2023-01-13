@@ -1,6 +1,6 @@
 plate_number,make,model,iu_number,owner_nric,registration_dt,is_registered,deregistration_dt,is_foreign_car,vehicle_type,color
-SLZ774X,Toyota,Townace GL,RDO30808CP,S9274095A,,1,,0,passenger,goid
-SKF6226P,Kia,Sorento,WPG14380FL,S7800256E,,1,,0,passenger,gray
-SKN8108S,BMW,318i,FNY46522WI,S9600005A,,1,,0,passenger,beige
-SKQ6867G,Suzuki,SX4,VZF42257RG,S9700005B,,1,,0,passenger,purple
-SMW6992Y,Mitsubishi,Lancer,VOM46464OM,S0400005C,,1,,0,passenger,orange
+SLZ774X,Mitsubishi,Colt,OZP17156WG,S9274095A,1964-09-01,1,,0,passenger,green
+SKF6226P,Honda,CRV,RUR55265AC,S7800256E,1993-03-16,1,,0,passenger,green
+SKN8108S,Honda,FIT GP1,GFN01388UU,S9600005A,2005-01-20,1,,0,passenger,black
+SKQ6867G,Toyota,Hilux,RZJ52087SM,S9700005B,1998-07-04,1,,0,passenger,brown
+SMW6992Y,Honda,Vezel,OMP38728JQ,S0400005C,1988-03-12,1,,0,passenger,blue
