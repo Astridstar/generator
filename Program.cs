@@ -50,6 +50,11 @@ internal class Program
         countryDs.load(appConfig.CountriesCsv);
         #endregion
 
+        #region Loading countries
+        VehicleMakeModelDataset vehicleDs = new();
+        vehicleDs.load(appConfig.VehicleMakeModelCsv);
+        #endregion        
+
         // Load the address
         #region Loading and generating Addresses
         AddressesParser parser = new();
@@ -70,7 +75,7 @@ internal class Program
         #endregion
 
         #region Load scenario and gen data
-        ScenarioGenerator generator = new(ref randomHumanPropDs, ref parser);
+        ScenarioGenerator generator = new(ref randomHumanPropDs, ref parser, ref vehicleDs);
         generator.generate(appConfig.ScenarioCsv);
         #endregion
     }

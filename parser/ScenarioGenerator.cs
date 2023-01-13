@@ -14,18 +14,18 @@ class ScenarioGenerator
     Dictionary<string, VehicleRecord> _vehicleHub = new();
     List<ScenarioRecord> _scenarioRecords = new();
 
-    IEnumerable<string>? _scenarioVehiclesPlate;
     IEnumerable<string>? _scenarioIdWithFamilies;
-    IEnumerable<string>? _scenarioEmployers;
 
     AddressesParser _addressParser;
 
     RandHumanPropDataset _randHumanPropDs;
+    VehicleMakeModelDataset _vehicleSrcDs;
 
-    public ScenarioGenerator(ref RandHumanPropDataset randHumanPropDs, ref AddressesParser parser)
+    public ScenarioGenerator(ref RandHumanPropDataset randHumanPropDs, ref AddressesParser parser, ref VehicleMakeModelDataset vehicleSrcDs)
     {
         _randHumanPropDs = randHumanPropDs;
         _addressParser = parser;
+        _vehicleSrcDs = vehicleSrcDs;
     }
     private void load(string filename)
     {
@@ -153,7 +153,14 @@ class ScenarioGenerator
             // for each person find the id of family members
             foreach (var veh in scenarioVehicles)
             {
-                _vehicleHub.Add(veh.car_plate, new VehicleRecord(veh.car_plate, veh.id));
+                VehicleRecord record = new VehicleRecord(veh.car_plate, veh.id);
+                VehicleMakeModel? generatedDetails = null;
+                _vehicleSrcDs.getRandomRecord(out generatedDetails);
+                if (generatedDetails != null)
+                {
+                    record.update(ref generatedDetails);
+                }
+                _vehicleHub.Add(veh.car_plate, record);
             }
         }
         // generate the LTA vehicle hub

@@ -1,6 +1,6 @@
-plate_number,make,model,iu_number,owner_nric,registration_dt,is_registration,de_registration_dt,is_foreign_car,vehicle_type,color
-SLZ774X,,,AJQ64137PUY,S9274095A,,,,,,
-SKF6226P,,,FYO74406EMK,S7800256E,,,,,,
-SKN8108S,,,AXV87220RDB,S9600005A,,,,,,
-SKQ6867G,,,JUJ87105DNY,S9700005B,,,,,,
-SMW6992Y,,,VKK65442RCC,S0400005C,,,,,,
+plate_number,make,model,iu_number,owner_nric,registration_dt,is_registered,deregistration_dt,is_foreign_car,vehicle_type,color
+SLZ774X,Toyota,Townace GL,RDO30808CP,S9274095A,,1,,0,passenger,goid
+SKF6226P,Kia,Sorento,WPG14380FL,S7800256E,,1,,0,passenger,gray
+SKN8108S,BMW,318i,FNY46522WI,S9600005A,,1,,0,passenger,beige
+SKQ6867G,Suzuki,SX4,VZF42257RG,S9700005B,,1,,0,passenger,purple
+SMW6992Y,Mitsubishi,Lancer,VOM46464OM,S0400005C,,1,,0,passenger,orange

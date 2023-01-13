@@ -12,6 +12,7 @@ namespace configurations
         private string _countriesCsv = "";
         private List<string> _addressesJsonFiles = new();
         private string _scenarioCsv = "";
+        private string _vehicleMakeModelCsv = "";
         public string Environment
         {
             get => _environment;
@@ -67,7 +68,11 @@ namespace configurations
             get => _scenarioCsv;
             set => _scenarioCsv = value;
         }
-
+        public string VehicleMakeModelCsv
+        {
+            get => _vehicleMakeModelCsv;
+            set => _vehicleMakeModelCsv = value;
+        }
         public AppConfig()
         {
 
