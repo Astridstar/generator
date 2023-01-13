@@ -66,6 +66,8 @@ class ScenarioGenerator
         //4. Generate employer
 
         //5. Generate friendly
+        generateVapFriendlys();
+
         //6. Generate blacklisted person
         //7. Generate blacklisted vehicle
         #endregion
@@ -185,7 +187,14 @@ class ScenarioGenerator
     {
 
     }
+    private void generateVapFriendlys()
+    {
+        // Load tbl_device_id 
+        // Load movement configs
+        // Load movements 
+        // Load defaults
 
+    }
     private void generatePeopleHubCsv()
     {
         using (var writer = new StreamWriter(@Program.PEOPLE_HUB_CSV_FULLPATH_FILE))
