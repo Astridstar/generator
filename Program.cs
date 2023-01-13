@@ -12,6 +12,7 @@ internal class Program
 
     public static readonly string ADDRESSES_CSV_FULLPATH_FILE = @"./config/addresses-generated.csv";
     public static readonly string PEOPLE_HUB_CSV_FULLPATH_FILE = @"./config/icsPeopleHub.csv";
+    public static readonly string VEHICLE_HUB_CSV_FULLPATH_FILE = @"./config/ltaVehicleHub.csv";
 
     private static void Main(string[] args)
     {

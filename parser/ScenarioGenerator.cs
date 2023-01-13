@@ -11,6 +11,7 @@ using records;
 class ScenarioGenerator
 {
     Dictionary<string, PersonRecord> _peopleHub = new();
+    Dictionary<string, VehicleRecord> _vehicleHub = new();
     List<ScenarioRecord> _scenarioRecords = new();
 
     IEnumerable<string>? _scenarioVehiclesPlate;
@@ -73,6 +74,7 @@ class ScenarioGenerator
 
         // Now generate the CSV data
         generatePeopleHubCsv(); // ICA PeopleHub
+        generateVehicleHubCsv(); // LTA VehicleHub
         return true;
     }
 
@@ -81,15 +83,11 @@ class ScenarioGenerator
         foreach (ScenarioRecord record in _scenarioRecords)
         {
             string addr = "";
-            string post = "":
+            string post = "";
             _addressParser.getNextAddress(out addr, out post);
             _peopleHub.Add(record.id,
             new PersonRecord(record, addr, post, _randHumanPropDs.getNextEmail(), "", _randHumanPropDs.getNextMobileNumber()));
         }
-
-        _scenarioVehiclesPlate = from person in _peopleHub.Values
-                                 where !String.IsNullOrEmpty(person.car_plate)
-                                 select person.car_plate;
 
         _scenarioIdWithFamilies = from person in _peopleHub.Values
                                   where (!String.IsNullOrEmpty(person.father_id) ||
@@ -146,7 +144,35 @@ class ScenarioGenerator
     private void generateVehiclesInScenario()
     {
         // grab license plate set
+        var scenarioVehicles = from person in _peopleHub.Values
+                               where !String.IsNullOrEmpty(person.car_plate)
+                               select (person.car_plate, person.id);
+
+        if (scenarioVehicles != null && scenarioVehicles.Count() > 0)
+        {
+            // for each person find the id of family members
+            foreach (var veh in scenarioVehicles)
+            {
+                _vehicleHub.Add(veh.car_plate, new VehicleRecord(veh.car_plate, veh.id));
+            }
+        }
         // generate the LTA vehicle hub
+    }
+    private string retrieveIdWithVehicle(string plateNo)
+    {
+        String retirevedId = "";
+        try
+        {
+            if (!String.IsNullOrEmpty(plateNo))
+                retirevedId = _peopleHub.Values.Where(person => String.Equals(person.car_plate, plateNo))
+                                                    .Single().id;
+        }
+        catch (System.Exception)
+        {
+            Console.WriteLine("Unable to find record with vehicle's owner ID", plateNo);
+            retirevedId = "";
+        }
+        return retirevedId;
     }
     private void generateDefaltPeopleRecords()
     {
@@ -159,6 +185,15 @@ class ScenarioGenerator
         {
             writer.WriteLine(PersonRecord.getRecordHeader());
             foreach (PersonRecord record in _peopleHub.Values)
+                writer.WriteLine(record.toCsvFormat());
+        }
+    }
+    private void generateVehicleHubCsv()
+    {
+        using (var writer = new StreamWriter(@Program.VEHICLE_HUB_CSV_FULLPATH_FILE))
+        {
+            writer.WriteLine(VehicleRecord.getRecordHeader());
+            foreach (VehicleRecord record in _vehicleHub.Values)
                 writer.WriteLine(record.toCsvFormat());
         }
     }

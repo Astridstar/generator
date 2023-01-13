@@ -1,7 +1,6 @@
-using data;
-
 namespace records;
 
+using data;
 class PersonRecord
 {
     public string sn { get; set; }
