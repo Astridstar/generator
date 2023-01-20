@@ -7,6 +7,10 @@ internal class PersonMovementDataset
 {
     List<PersonMovement> _personMovementList = new();
 
+    public List<PersonMovement> PersonMovementList
+    {
+        get { return _personMovementList; }
+    }
     public void load(string filename)
     {
         StreamReader reader = new StreamReader(filename);
@@ -24,5 +28,6 @@ internal class PersonMovementDataset
             _personMovementList.AddRange(csv.GetRecords<PersonMovement>().ToList());
         }
     }
+
 }
 

@@ -210,7 +210,7 @@ class ScenarioGenerator
         //_vapPersonDetectionGenerator
 
         IEnumerable<string> friendlyList = from record in _scenarioRecords
-                                           where (record.friendly.CompareTo("1") == 0)
+                                           where (record.friendly.CompareTo("y") == 0)
                                            select record.id;
 
         _vapPersonDetectionGenerator.generateFriendliesInNeighborhood(friendlyList);

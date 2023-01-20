@@ -2,7 +2,7 @@ using System.Text;
 
 namespace records;
 
-class tbl_person_attribute_event_record
+class TblPersonAttributeEventRecord
 {
     public string id { get; set; }
     public string event_id { get; set; }
@@ -99,7 +99,7 @@ class tbl_person_attribute_event_record
     public string bbox_x2 { get; set; }
     public string bbox_y2 { get; set; }
 
-    public tbl_person_attribute_event_record()
+    public TblPersonAttributeEventRecord()
     {
         id = "";
         event_id = "";

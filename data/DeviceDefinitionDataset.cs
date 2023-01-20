@@ -24,4 +24,20 @@ internal class DeviceDefinitionDataset
             _deviceDefinitionList.AddRange(csv.GetRecords<DeviceDefinitionData>().ToList());
         }
     }
+
+    public string? getDeviceRefId(string deviceName)
+    {
+        try
+        {
+            DeviceDefinitionData? data =
+            _deviceDefinitionList.Where(item => (0 == String.Compare(item.device_name, deviceName)))
+                                                            .Single();
+            return data.ref_id;
+        }
+        catch (Exception)
+        {
+        }
+        return null;
+    }
+
 }

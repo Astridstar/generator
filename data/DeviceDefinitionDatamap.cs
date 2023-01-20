@@ -80,8 +80,8 @@ class DeviceDefinitionData
 
     public string location_elevation
     {
-        get => location_elevation;
-        set => location_elevation = value;
+        get => _location_elevation;
+        set => _location_elevation = value;
     }
 
     public string zone_id
