@@ -2,7 +2,6 @@
 
 
 using data;
-using configurations;
 using parser;
 using Microsoft.Extensions.Configuration;
 
@@ -10,9 +9,12 @@ using Microsoft.Extensions.Configuration;
 internal class Program
 {
 
-    public static readonly string ADDRESSES_CSV_FULLPATH_FILE = @"./config/addresses-generated.csv";
-    public static readonly string PEOPLE_HUB_CSV_FULLPATH_FILE = @"./config/icsPeopleHub.csv";
-    public static readonly string VEHICLE_HUB_CSV_FULLPATH_FILE = @"./config/ltaVehicleHub.csv";
+    public static readonly string ADDRESSES_CSV_FULLPATH_FILE = @"./config/generated/addresses-generated.csv";
+    public static readonly string PEOPLE_HUB_CSV_FULLPATH_FILE = @"./config/generated/icsPeopleHub.csv";
+    public static readonly string VEHICLE_HUB_CSV_FULLPATH_FILE = @"./config/generated/ltaVehicleHub.csv";
+    public static readonly string VAP_PERSON_ATTRIBUTE_EVENT_CSV_FULLPATH_FILE = @"./config/generated/tbl_person_attribute_event.csv";
+    public static readonly string VAP_FR_EVENT_CSV_FULLPATH_FILE = @"./config/generated/fr_event.csv";
+    public static readonly string VAP_FR_ALERT_CSV_FULLPATH_FILE = @"./config/generated/fr_alert.csv";
 
     private static void Main(string[] args)
     {
@@ -22,11 +24,12 @@ internal class Program
             .AddEnvironmentVariables();
         var configurationRoot = builder.Build();
 
-        var appConfig = configurationRoot.GetSection(nameof(configurations.AppConfig)).Get<AppConfig>();
+        var appConfig = configurationRoot.GetSection(nameof(AppConfig)).Get<AppConfig>();
+        var vapConfig = configurationRoot.GetSection(nameof(VapConfig)).Get<VapConfig>();
 
-        if (appConfig == null)
+        if (appConfig == null || vapConfig == null)
         {
-            Console.WriteLine("Hello cannot find the AppConfig");
+            Console.WriteLine("Unable to proceed. Unable to get AppConfig or VapConfig!!!");
             return;
         }
 
@@ -55,7 +58,7 @@ internal class Program
         vehicleDs.load(appConfig.VehicleMakeModelCsv);
         #endregion        
 
-        #region Loading Vehicle Make & Model list
+        #region Loading Acra information
         ArcaDataset arcaDs = new();
         arcaDs.load(appConfig.AcraDataCsv);
         #endregion        
@@ -80,7 +83,11 @@ internal class Program
         #endregion
 
         #region Load scenario and gen data
-        ScenarioGenerator generator = new(ref randomHumanPropDs, ref parser, ref vehicleDs);
+        ScenarioGenerator generator = new(ref appConfig,
+                                            ref vapConfig,
+                                            ref randomHumanPropDs,
+                                            ref parser,
+                                            ref vehicleDs);
         generator.generate(appConfig.ScenarioCsv);
         #endregion
     }

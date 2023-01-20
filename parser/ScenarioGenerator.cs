@@ -21,11 +21,19 @@ class ScenarioGenerator
     RandHumanPropDataset _randHumanPropDs;
     VehicleMakeModelDataset _vehicleSrcDs;
 
-    public ScenarioGenerator(ref RandHumanPropDataset randHumanPropDs, ref AddressesParser parser, ref VehicleMakeModelDataset vehicleSrcDs)
+    VapConfig _vapConfig;
+    VapPersonDetectionGenerator _vapPersonDetectionGenerator;
+
+    public ScenarioGenerator(ref AppConfig appConfig, ref VapConfig vapConfig,
+                            ref RandHumanPropDataset randHumanPropDs,
+                            ref AddressesParser parser,
+                            ref VehicleMakeModelDataset vehicleSrcDs)
     {
         _randHumanPropDs = randHumanPropDs;
         _addressParser = parser;
         _vehicleSrcDs = vehicleSrcDs;
+        _vapConfig = vapConfig;
+        _vapPersonDetectionGenerator = new();
     }
     private void load(string filename)
     {
@@ -38,6 +46,8 @@ class ScenarioGenerator
             csv.Context.RegisterClassMap<ScenarioRecordMap>();
             _scenarioRecords.AddRange(csv.GetRecords<ScenarioRecord>().ToList());
         }
+
+        _vapPersonDetectionGenerator.load(ref _vapConfig);
     }
 
     public bool generate(string scenariofile)
@@ -66,7 +76,8 @@ class ScenarioGenerator
         //4. Generate employer
 
         //5. Generate friendly
-        generateVapFriendlys();
+        generateVapFriendlies();
+        generateVapUnknownFriendlies();
 
         //6. Generate blacklisted person
         //7. Generate blacklisted vehicle
@@ -189,12 +200,24 @@ class ScenarioGenerator
     {
 
     }
-    private void generateVapFriendlys()
+    private void generateVapFriendlies()
     {
         // Load tbl_device_id 
         // Load movement configs
         // Load movements 
         // Load defaults
+
+        //_vapPersonDetectionGenerator
+
+        IEnumerable<string> friendlyList = from record in _scenarioRecords
+                                           where (record.friendly.CompareTo("1") == 0)
+                                           select record.id;
+
+        _vapPersonDetectionGenerator.generateFriendliesInNeighborhood(friendlyList);
+    }
+
+    private void generateVapUnknownFriendlies()
+    {
 
     }
     private void generatePeopleHubCsv()
@@ -214,5 +237,14 @@ class ScenarioGenerator
             foreach (VehicleRecord record in _vehicleHub.Values)
                 writer.WriteLine(record.toCsvFormat());
         }
+    }
+    private void generateTblPersonAttributeEventCsv()
+    {
+        // using (var writer = new StreamWriter(@Program.VAP_PERSON_ATTRIBUTE_EVENT_CSV_FULLPATH_FILE))
+        // {
+        //     writer.WriteLine(tbl_person_attribute_event_record.getRecordHeader());
+        //     foreach (VehicleRecord record in _vehicleHub.Values)
+        //         writer.WriteLine(record.toCsvFormat());
+        // }
     }
 }

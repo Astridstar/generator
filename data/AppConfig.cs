@@ -1,4 +1,4 @@
-namespace configurations
+namespace data
 {
     internal class AppConfig
     {
@@ -80,6 +80,9 @@ namespace configurations
             get => _acraDataCsv;
             set => _acraDataCsv = value;
         }
+
+        public string VapObjectConfigCsv { get; set; }
+
         public AppConfig()
         {
 
