@@ -70,6 +70,8 @@ class ScenarioGenerator
 
         //6. Generate blacklisted person
         //7. Generate blacklisted vehicle
+
+        //8. Generate unknown friendlies
         #endregion
 
         generateDefaltPeopleRecords();

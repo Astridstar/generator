@@ -1,0 +1,181 @@
+{
+    "event_type": [
+        "PERSON_ATTRIBUTE",
+        "VEHICLE_ATTRIBUTE"
+    ],
+    "va_provider": [
+        {
+            "id": "1",
+            "name": "Sensetime"
+        }
+    ],
+    "va_engine": [
+        {
+            "id": "1",
+            "code": "senseunity"
+        }
+    ],
+    "person_attribute": {
+        "va_type": [
+            "PAOD"
+        ],
+        "gender": [
+            "FEMALE",
+            "MALE"
+        ],
+        "ethnicity": [],
+        "age_class": [
+            "ST_ADULT",
+            "ST_OLD",
+            "ST_CHILD"
+        ],
+        "headwear_type": [],
+        "hair_style": [],
+        "hair_color": [
+            "BLACK"
+        ],
+        "hair_length": [
+            "BOLD",
+            "LONG",
+            "ST_SHORT"
+        ],
+        "eyewear_type": [],
+        "eyewear_colour": [],
+        "mask_type": [
+            "MASK"
+        ],
+        "mask_colour": [
+            "BLUE",
+            "GRAY",
+            "WHITE",
+            "BLACK"
+        ],
+        "facial_hair_type": [],
+        "facial_hair_colour": [],
+        "facial_hair_length": [],
+        "skin_colour": [],
+        "topwear_type": [
+            "SHIRT",
+            "DRESS",
+            "JACKET",
+            "SHIRT",
+            "BUSINESS_SUIT",
+            "LONG_COAT",
+            "SWEATER",
+            "T-SHIRT",
+            "COAT_STYLE_TYPE_OTHER"
+        ],
+        "topwear_pattern": [
+            "ST_JOINT",
+            "ST_PURE",
+            "ST_STRIPE",
+            "ST_LATTIC",
+            "ST_DESIGN"
+        ],
+        "topwear_colour": [
+            "WHITE",
+            "BLACK",
+            "BLUE",
+            "YELLOW",
+            "RED",
+            "GREEN",
+            "GRAY"
+        ],
+        "sleeve_colour": [],
+        "sleeve_length": [
+            "LONG_SLEEVE",
+            "SHORT_SLEEVE"
+        ],
+        "outerwear_type": [],
+        "outerwear_pattern": [],
+        "outerwear_colour": [],
+        "outerwear_length": [],
+        "necktie_type": [],
+        "necktie_pattern": [],
+        "necktie_colour": [],
+        "bottomwear_type": [
+            "TROUSERS",
+            "ST_SKIRT",
+            "SHORTS"
+        ],
+        "bottomwear_pattern": [
+            "ST_JOINT",
+            "ST_PURE",
+            "ST_STRIPE",
+            "ST_LATTIC",
+            "ST_DESIGN"
+        ],
+        "bottomwear_colour": [
+            "WHITE",
+            "BLACK",
+            "BLUE",
+            "YELLOW",
+            "RED",
+            "GREEN",
+            "GRAY"
+        ],
+        "bottomwear_length": [],
+        "footwear_type": [
+            "WALKING_SHOES",
+            "LEATHER_SHOES",
+            "SANDAL",
+            "BOOTS"
+        ],
+        "footwear_pattern": [],
+        "footwear_colour": [
+            "BLACK",
+            "BLUE",
+            "GRAY",
+            "RED",
+            "WHITE",
+            "YELLOW"
+        ],
+        "bag_type": [
+            "BACKPACK",
+            "HAND_BAG",
+            "SHOULDER_BAG",
+            "BAG_STYLE_TYPE_NONE",
+            "TROLLEY",
+            "WAIST_PACK"
+        ],
+        "bag_colour": [
+            "WHITE",
+            "BLACK",
+            "BLUE",
+            "YELLOW",
+            "RED",
+            "GREEN",
+            "GRAY",
+            "PURPLE"
+        ],
+        "uniform": []
+    },
+    "vehicle_attribute": {
+        "vehicle_color": [
+            "RED",
+            "BLUE",
+            "WHITE",
+            "GRAY",
+            "BLACK",
+            "PURPLE",
+            "BROWN",
+            "YELLOW",
+            "GREEN",
+            "PINK"
+        ],
+        "vehicle_class": [
+            "ST_CAR",
+            "ST_SUV",
+            "ST_VAN",
+            "ST_BIG_BUS",
+            "ST_SMALL_TRUCK",
+            "ST_MED_BUS",
+            "ST_BIG_TRUCK"
+        ],
+        "vehicle_angle": [
+            "ST_FRONT",
+            "ST_BACK",
+            "ST_SIDE"
+        ]
+    }
+}
