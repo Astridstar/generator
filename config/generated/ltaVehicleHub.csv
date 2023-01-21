@@ -1,6 +1,6 @@
 plate_number,make,model,iu_number,owner_nric,registration_dt,is_registered,deregistration_dt,is_foreign_car,vehicle_type,color
-SLZ774X,Hyundai,Tucson,UXM08773WN,S9274095A,1960-04-23,1,,0,passenger,white
-SKF6226P,Jeep,Wrangler,XPL32276DL,S7800256E,1953-07-24,1,,0,passenger,brown
-SKN8108S,Mitsubishi,Montero,BUR70530LC,S9600005A,1976-04-12,1,,0,passenger,brown
-SKQ6867G,Fiat,1100,FRX13146AE,S9700005B,1960-12-30,1,,0,passenger,gray
-SMW6992Y,Nissan,Sunny,DOC64534OI,S0400005C,1980-08-01,1,,0,passenger,red
+SLZ774X,Honda,Fit,BZP20265RX,S9274095A,1978-09-22,1,,0,passenger,gray
+SKF6226P,Tata,Dimo Batta Ace,JKD35450NB,S7800256E,1972-05-31,1,,0,passenger,brown
+SKN8108S,Tata,Dimo Batta,AXO31465AD,S9600005A,1982-04-27,1,,0,passenger,purple
+SKQ6867G,Bajaj,RE,FIZ11071HV,S9700005B,2006-08-17,1,,0,passenger,beige
+SMW6992Y,Yamaha,FZ-S Version 2.0,IDL83604RA,S0400005C,1999-09-01,1,,0,passenger,blue

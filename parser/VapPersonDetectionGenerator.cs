@@ -111,7 +111,7 @@ class VapPersonDetectionGenerator
 
             // Now create the tbl_person_attribute_event rows and populate
             // the record with the vapobject config parameters
-            generateVapPersonRecords(steps, vapObjectConfig, personVapObjectId[nric]);
+            generateVapPersonRecords(steps, vapObjectConfig, personVapObjectId[nric], nric);
         }
     }
     private void generatePersonMovementRecord(VapObjectConfig vapObjectConfig, out List<StepDetails>? steps, DateTimeOffset startdt)
@@ -154,7 +154,7 @@ class VapPersonDetectionGenerator
             deviceRefId));
         }
     }
-    private void generateVapPersonRecords(List<StepDetails> steps, VapObjectConfig vapObjectConfig, Guid personVapObjectId)
+    private void generateVapPersonRecords(List<StepDetails> steps, VapObjectConfig vapObjectConfig, Guid personVapObjectId, string personNric)
     {
         foreach (StepDetails step in steps)
         {
@@ -167,7 +167,7 @@ class VapPersonDetectionGenerator
             updateFrEventDef(record, personVapObjectId);
 
             // Generate fr_alert
-            updateFrAlertDef(record, personVapObjectId);
+            updateFrAlertDef(record, personVapObjectId, personNric);
         }
     }
     public static double ConvertToDouble(string Value)
@@ -193,7 +193,7 @@ class VapPersonDetectionGenerator
         record.id = step.id.ToString();
         record.event_id = step.eventId;
         record.device_id = step.deviceId;
-        record.event_dt = step.eventDt.ToString("YYYY-MM-DD hh:mm:ss");
+        record.event_dt = step.eventDt.ToString("yyyy-MM-dd HH:mm:ss");
     }
     private void updatePersonAttributeEventRecord(ref TblPersonAttributeEventRecord record, VapObjectConfig vapObjectConfig, DateTimeOffset eventdt)
     {
@@ -313,18 +313,17 @@ class VapPersonDetectionGenerator
         _vapFrEventDefRecords.Add(eventDef);
     }
 
-    private void updateFrAlertDef(TblPersonAttributeEventRecord record, Guid personVapObjectId)
+    private void updateFrAlertDef(TblPersonAttributeEventRecord record, Guid personVapObjectId, string personNric)
     {
         FrAlertDefRecord alertDefRecord = new();
-        alertDefRecord.id = "";
-        alertDefRecord.fr_event_id = "";
-        alertDefRecord.fr_alert_dt = "";
-        alertDefRecord.va_engine_id = "";
-        alertDefRecord.person_id = "";
-        alertDefRecord.score = "";
+        alertDefRecord.id = record.id;
+        alertDefRecord.fr_event_id = record.event_id;
+        alertDefRecord.fr_alert_dt = record.event_dt;
+        alertDefRecord.va_engine_id = record.va_engine_id;
+        alertDefRecord.person_id = personVapObjectId.ToString();
+        alertDefRecord.score = FrAlertDefRecord.getNextCfd();
         alertDefRecord.info = "";
-        alertDefRecord.key = "";
-        alertDefRecord.vap_object_id = personVapObjectId.ToString();
+        alertDefRecord.key = personNric;
         _vapFrAlertDefRecords.Add(alertDefRecord);
     }
 }

@@ -42,7 +42,7 @@ class PersonRecord
     }
     public string toCsvFormat()
     {
-        return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{9},{10},{11},{12},{13},{14},{15},{16},{17},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},",
+        return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},",
         sn, gender, fullname, email1, email2, salutation, birthday, mobile, phone2, fax, id, address1, address2, postcode,
         citizenship, nationality,
         company, company_id,
@@ -52,7 +52,7 @@ class PersonRecord
 
     public static string getRecordHeader()
     {
-        return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{9},{10},{11},{12},{13},{14},{15},{16},{17},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},",
+        return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},",
         nameof(sn),
         nameof(gender),
         nameof(fullname),

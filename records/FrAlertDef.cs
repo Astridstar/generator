@@ -11,9 +11,11 @@ class FrAlertDefRecord
     public string score { get; set; }
     public string info { get; set; }
     public string key { get; set; }
-    public string vap_object_id { get; set; }
 
     private static IdGenerator _id_factory = new();
+    private static float _highCfdMinValue = 0.9f;
+    private static float _highCfdMaxValue = 1.0f;
+    private static Random _rand = new();
 
     public FrAlertDefRecord()
     {
@@ -25,13 +27,12 @@ class FrAlertDefRecord
         score = "";
         info = "";
         key = "";
-        vap_object_id = "";
     }
 
     public static string getRecordHeader()
     {
         StringBuilder builder = new StringBuilder();
-        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7}",
             nameof(id),
             nameof(fr_event_id),
             nameof(fr_alert_dt),
@@ -39,8 +40,7 @@ class FrAlertDefRecord
             nameof(person_id),
             nameof(score),
             nameof(info),
-            nameof(key),
-            nameof(vap_object_id)
+            nameof(key)
         );
         return builder.ToString();
     }
@@ -48,7 +48,7 @@ class FrAlertDefRecord
     public string toCsvFormat()
     {
         StringBuilder builder = new StringBuilder();
-        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7}",
             id,
             fr_event_id,
             fr_alert_dt,
@@ -56,13 +56,16 @@ class FrAlertDefRecord
             person_id,
             score,
             info,
-            key,
-            vap_object_id
+            key
         );
         return builder.ToString();
     }
     public static long getNextId()
     {
         return _id_factory.getNextId();
+    }
+    public static string getNextCfd()
+    {
+        return (_rand.NextSingle() * (_highCfdMaxValue - _highCfdMinValue) + _highCfdMinValue).ToString();
     }
 }

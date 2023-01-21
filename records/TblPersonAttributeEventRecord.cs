@@ -217,7 +217,7 @@ class TblPersonAttributeEventRecord
     public static string getRecordHeader()
     {
         StringBuilder builder = new StringBuilder();
-        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             nameof(id),
             nameof(event_id),
             nameof(event_type),
@@ -229,7 +229,7 @@ class TblPersonAttributeEventRecord
             nameof(gender),
             nameof(gender_cfd)
         );
-        builder.AppendFormat("{10},{11},{12},{13},{14},{15},{16},{17},{18},{19}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             nameof(ethnicity),
             nameof(ethnicity_cfd),
             nameof(lower_age_range),
@@ -241,7 +241,7 @@ class TblPersonAttributeEventRecord
             nameof(height),
             nameof(height_cfd)
         );
-        builder.AppendFormat("{20},{21},{22},{23},{24},{25},{26},{27},{28},{29}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             nameof(headwear_type),
             nameof(headwear_type_cfd),
             nameof(hair_style),
@@ -253,7 +253,7 @@ class TblPersonAttributeEventRecord
             nameof(eyewear_type),
             nameof(eyewear_type_cfd)
         );
-        builder.AppendFormat("{30},{31},{32},{33},{34},{35},{36},{37},{38},{39}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             nameof(eyewear_colour),
             nameof(eyewear_colour_cfd),
             nameof(mask_type),
@@ -265,7 +265,7 @@ class TblPersonAttributeEventRecord
             nameof(facial_hair_colour),
             nameof(facial_hair_colour_cfd)
         );
-        builder.AppendFormat("{40},{41},{42},{43},{44},{45},{46},{47},{48},{49}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             nameof(facial_hair_length),
             nameof(facial_hair_length_cfd),
             nameof(skin_colour),
@@ -277,7 +277,7 @@ class TblPersonAttributeEventRecord
             nameof(topwear_colour),
             nameof(topwear_colour_cfd)
         );
-        builder.AppendFormat("{50},{51},{52},{53},{54},{55},{56},{57},{58},{59}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             nameof(sleeve_colour),
             nameof(sleeve_colour_cfd),
             nameof(sleeve_length),
@@ -289,7 +289,7 @@ class TblPersonAttributeEventRecord
             nameof(outerwear_colour),
             nameof(outerwear_colour_cfd)
         );
-        builder.AppendFormat("{60},{61},{62},{63},{64},{65},{66},{67},{68},{69}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             nameof(outerwear_length),
             nameof(outerwear_length_cfd),
             nameof(necktie_type),
@@ -301,7 +301,7 @@ class TblPersonAttributeEventRecord
             nameof(bottomwear_type),
             nameof(bottomwear_type_cfd)
         );
-        builder.AppendFormat("{70},{71},{72},{73},{74},{75},{76},{77},{78},{79}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             nameof(bottomwear_pattern),
             nameof(bottomwear_pattern_cfd),
             nameof(bottomwear_colour),
@@ -313,7 +313,7 @@ class TblPersonAttributeEventRecord
             nameof(footwear_pattern),
             nameof(footwear_pattern_cfd)
         );
-        builder.AppendFormat("{80},{81},{82},{83},{84},{85},{86},{87},{88},{89}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             nameof(footwear_colour),
             nameof(footwear_colour_cfd),
             nameof(bag_type),
@@ -325,7 +325,7 @@ class TblPersonAttributeEventRecord
             nameof(full_image_url),
             nameof(cropped_image_url)
         );
-        builder.AppendFormat("{90},{91},{92},{93},{94}",
+        builder.AppendFormat("{0},{1},{2},{3},{4}",
             nameof(bbox_x1),
             nameof(bbox_y1),
             nameof(bbox_x2),
@@ -340,7 +340,7 @@ class TblPersonAttributeEventRecord
     {
         StringBuilder builder = new StringBuilder();
 
-        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             id,
             event_id,
             event_type,
@@ -353,7 +353,7 @@ class TblPersonAttributeEventRecord
             gender_cfd
         );
 
-        builder.AppendFormat("{10},{11},{12},{13},{14},{15},{16},{17},{18},{19}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             ethnicity,
             ethnicity_cfd,
             lower_age_range,
@@ -366,7 +366,7 @@ class TblPersonAttributeEventRecord
             height_cfd
         );
 
-        builder.AppendFormat("{20},{21},{22},{23},{24},{25},{26},{27},{28},{29}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             headwear_type,
             headwear_type_cfd,
             hair_style,
@@ -379,7 +379,7 @@ class TblPersonAttributeEventRecord
             eyewear_type_cfd
         );
 
-        builder.AppendFormat("{30},{31},{32},{33},{34},{35},{36},{37},{38},{39}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             eyewear_colour,
             eyewear_colour_cfd,
             mask_type,
@@ -391,7 +391,7 @@ class TblPersonAttributeEventRecord
             facial_hair_colour,
             facial_hair_colour_cfd
         );
-        builder.AppendFormat("{40},{41},{42},{43},{44},{45},{46},{47},{48},{49}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             facial_hair_length,
             facial_hair_length_cfd,
             skin_colour,
@@ -403,7 +403,7 @@ class TblPersonAttributeEventRecord
             topwear_colour,
             topwear_colour_cfd
         );
-        builder.AppendFormat("{50},{51},{52},{53},{54},{55},{56},{57},{58},{59}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             sleeve_colour,
             sleeve_colour_cfd,
             sleeve_length,
@@ -415,7 +415,7 @@ class TblPersonAttributeEventRecord
             outerwear_colour,
             outerwear_colour_cfd
         );
-        builder.AppendFormat("{60},{61},{62},{63},{64},{65},{66},{67},{68},{69}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             outerwear_length,
             outerwear_length_cfd,
             necktie_type,
@@ -427,7 +427,7 @@ class TblPersonAttributeEventRecord
             bottomwear_type,
             bottomwear_type_cfd
         );
-        builder.AppendFormat("{70},{71},{72},{73},{74},{75},{76},{77},{78},{79}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             bottomwear_pattern,
             bottomwear_pattern_cfd,
             bottomwear_colour,
@@ -439,7 +439,7 @@ class TblPersonAttributeEventRecord
             footwear_pattern,
             footwear_pattern_cfd
         );
-        builder.AppendFormat("{80},{81},{82},{83},{84},{85},{86},{87},{88},{89}",
+        builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},",
             footwear_colour,
             footwear_colour_cfd,
             bag_type,
@@ -451,7 +451,7 @@ class TblPersonAttributeEventRecord
             full_image_url,
             cropped_image_url
         );
-        builder.AppendFormat("{90},{91},{92},{93},{94}",
+        builder.AppendFormat("{0},{1},{2},{3},{4}",
             bbox_x1,
             bbox_y1,
             bbox_x2,
