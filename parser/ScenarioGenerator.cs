@@ -219,7 +219,7 @@ class ScenarioGenerator
 
     private void generateVapUnknownFriendlies()
     {
-
+        _vapPersonDetectionGenerator.generateUnknownFriendlies();
     }
     private void generatePeopleHubCsv()
     {

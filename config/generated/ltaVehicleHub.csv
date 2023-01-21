@@ -1,6 +1,6 @@
 plate_number,make,model,iu_number,owner_nric,registration_dt,is_registered,deregistration_dt,is_foreign_car,vehicle_type,color
-SLZ774X,Suzuki,Alto,UOV43533FO,S9274095A,1976-03-27,1,,0,passenger,white
-SKF6226P,Toyota,Prius,YOE24876SM,S7800256E,2006-02-22,1,,0,passenger,silver
-SKN8108S,Toyota,Corolla,HWS05650GA,S9600005A,2007-04-07,1,,0,passenger,white
-SKQ6867G,Micro,Korondo,CMI31300EW,S9700005B,1989-11-03,1,,0,passenger,brown
-SMW6992Y,Suzuki,Wagon R Stingray,LMV08753ZI,S0400005C,1976-04-16,1,,0,passenger,white
+SLZ774X,Suzuki,Every Wagon,UMM76174UH,S9274095A,1972-06-24,1,,0,passenger,black
+SKF6226P,Nissan,FB15,SSA45488IT,S7800256E,2008-07-12,1,,0,passenger,red
+SKN8108S,Honda,Vezel,JFO33077PE,S9600005A,1971-04-13,1,,0,passenger,beige
+SKQ6867G,Piaggio,Ape,JEC25503TD,S9700005B,1982-04-03,1,,0,passenger,orange
+SMW6992Y,Isuzu,Isuzu,GKQ40701TE,S0400005C,1996-05-18,1,,0,passenger,goid

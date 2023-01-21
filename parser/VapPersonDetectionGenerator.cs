@@ -114,6 +114,40 @@ class VapPersonDetectionGenerator
             generateVapPersonRecords(steps, vapObjectConfig, personVapObjectId[nric], nric);
         }
     }
+    public void generateUnknownFriendlies()
+    {
+        List<StepDetails>? steps = null;
+        IEnumerable<VapObjectConfig>? vapObjectList = null;
+
+        _vapConfigDs.getVapObjectConfigWithUnknownPersons(out vapObjectList);
+        if (vapObjectList == null)
+        {
+            Console.WriteLine("Unable to find vap object configured with status is_known = 0. Skipping");
+            return;
+        }
+
+        Guid vapObjectId = Guid.NewGuid();
+        DateTimeOffset startdt = DateTimeOffset.Now.Subtract(new TimeSpan(10, 0, 0, 0));
+        foreach (VapObjectConfig vapObject in vapObjectList)
+        {
+            // Generate tbl_person_attribute_event records
+            // Now grab those dynamic variables per detection/step in the 
+            // tbl_person_attribute_event record to be generated
+            // id
+            // eventid
+            // event_dt
+            // device_id           
+            generatePersonMovementRecord(vapObject, out steps, startdt);
+            if (steps == null)
+            {
+                Console.WriteLine("No person movement defined for generation.  Unable to generate records for unidentifiable person in tbl_person_attribute_event for ID.");
+                break;
+            }
+            // Now create the tbl_person_attribute_event rows and populate
+            // the record with the vapobject config parameters
+            generateVapPersonRecords(steps, vapObject, vapObjectId, "");
+        }
+    }
     private void generatePersonMovementRecord(VapObjectConfig vapObjectConfig, out List<StepDetails>? steps, DateTimeOffset srcstartdt)
     {
         if (_personMovementDs.PersonMovementList.Count <= 0)
@@ -170,6 +204,10 @@ class VapPersonDetectionGenerator
 
             // Generate fr_event
             updateFrEventDef(record, personVapObjectId);
+
+            // NRTIC found for the vap object so no need to generate fr_alert
+            if (String.IsNullOrEmpty(personNric))
+                return;
 
             // Generate fr_alert
             updateFrAlertDef(record, personVapObjectId, personNric);

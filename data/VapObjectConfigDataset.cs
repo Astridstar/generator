@@ -51,5 +51,13 @@ class VapObjectConfigDataset
         vapObject = _vapObjectConfigDs.Where(x => x.known_id == id).SingleOrDefault();
     }
 
+    public void getVapObjectConfigWithUnknownPersons(out IEnumerable<VapObjectConfig>? vapObjectList)
+    {
+        vapObjectList = null;
+        if (_vapObjectConfigDs.Count <= 0)
+            return;
+
+        vapObjectList = _vapObjectConfigDs.Where(x => x.is_known == "0");
+    }
 
 }
