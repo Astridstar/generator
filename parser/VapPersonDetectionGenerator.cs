@@ -114,7 +114,7 @@ class VapPersonDetectionGenerator
             generateVapPersonRecords(steps, vapObjectConfig, personVapObjectId[nric], nric);
         }
     }
-    private void generatePersonMovementRecord(VapObjectConfig vapObjectConfig, out List<StepDetails>? steps, DateTimeOffset startdt)
+    private void generatePersonMovementRecord(VapObjectConfig vapObjectConfig, out List<StepDetails>? steps, DateTimeOffset srcstartdt)
     {
         if (_personMovementDs.PersonMovementList.Count <= 0)
         {
@@ -123,35 +123,40 @@ class VapPersonDetectionGenerator
         }
 
         steps = new();
-        for (int i = 0; i < _personMovementDs.PersonMovementList.Count; i++)
+        DateTimeOffset startingDt = srcstartdt;
+        for (int dailyOccurrence = 0; dailyOccurrence < 10; dailyOccurrence++)
         {
-            string cameraName = _personMovementDs.PersonMovementList[i].camera_name;
-            string? deviceRefId = _deviceDefinitionDs.getDeviceRefId(cameraName);
-            if (String.IsNullOrEmpty(deviceRefId))
+            startingDt = srcstartdt.AddDays(dailyOccurrence);
+            for (int i = 0; i < _personMovementDs.PersonMovementList.Count; i++)
             {
-                Console.WriteLine("Cannot Device ID for camera with name {0}", cameraName);
-                continue;
+                string cameraName = _personMovementDs.PersonMovementList[i].camera_name;
+                string? deviceRefId = _deviceDefinitionDs.getDeviceRefId(cameraName);
+                if (String.IsNullOrEmpty(deviceRefId))
+                {
+                    Console.WriteLine("Cannot Device ID for camera with name {0}", cameraName);
+                    continue;
+                }
+                steps.Add(new StepDetails(UnqiueIdFactory.Instance.getNextId(),
+                Guid.NewGuid().ToString(),
+                startingDt.AddSeconds(ConvertToDouble(_personMovementDs.PersonMovementList[i].forward_time_s)),
+                deviceRefId));
             }
-            steps.Add(new StepDetails(UnqiueIdFactory.Instance.getNextId(),
-            Guid.NewGuid().ToString(),
-            startdt.AddSeconds(ConvertToDouble(_personMovementDs.PersonMovementList[i].forward_time_s)),
-            deviceRefId));
-        }
 
-        startdt = startdt.AddHours(2);
-        for (int i = _personMovementDs.PersonMovementList.Count - 1; i >= 0; i--)
-        {
-            string cameraName = _personMovementDs.PersonMovementList[i].camera_name;
-            string? deviceRefId = _deviceDefinitionDs.getDeviceRefId(cameraName);
-            if (String.IsNullOrEmpty(deviceRefId))
+            startingDt = startingDt.AddHours(2);
+            for (int i = _personMovementDs.PersonMovementList.Count - 1; i >= 0; i--)
             {
-                Console.WriteLine("Cannot Device ID for camera with name {0}", cameraName);
-                continue;
+                string cameraName = _personMovementDs.PersonMovementList[i].camera_name;
+                string? deviceRefId = _deviceDefinitionDs.getDeviceRefId(cameraName);
+                if (String.IsNullOrEmpty(deviceRefId))
+                {
+                    Console.WriteLine("Cannot Device ID for camera with name {0}", cameraName);
+                    continue;
+                }
+                steps.Add(new StepDetails(UnqiueIdFactory.Instance.getNextId(),
+                Guid.NewGuid().ToString(),
+                startingDt.AddSeconds(ConvertToDouble(_personMovementDs.PersonMovementList[i].backward_time_s)),
+                deviceRefId));
             }
-            steps.Add(new StepDetails(UnqiueIdFactory.Instance.getNextId(),
-            Guid.NewGuid().ToString(),
-            startdt.AddSeconds(ConvertToDouble(_personMovementDs.PersonMovementList[i].backward_time_s)),
-            deviceRefId));
         }
     }
     private void generateVapPersonRecords(List<StepDetails> steps, VapObjectConfig vapObjectConfig, Guid personVapObjectId, string personNric)
@@ -160,7 +165,7 @@ class VapPersonDetectionGenerator
         {
             TblPersonAttributeEventRecord record = new();
             updatePersonAttributeEventRecord(ref record, step);
-            updatePersonAttributeEventRecord(ref record, vapObjectConfig, step.eventDt);
+            updatePersonAttributeEventRecord(ref record, vapObjectConfig, step.eventDt, personVapObjectId);
             _vapPersonAttributeRecords.Add(record);
 
             // Generate fr_event
@@ -195,7 +200,7 @@ class VapPersonDetectionGenerator
         record.device_id = step.deviceId;
         record.event_dt = step.eventDt.ToString("yyyy-MM-dd HH:mm:ss");
     }
-    private void updatePersonAttributeEventRecord(ref TblPersonAttributeEventRecord record, VapObjectConfig vapObjectConfig, DateTimeOffset eventdt)
+    private void updatePersonAttributeEventRecord(ref TblPersonAttributeEventRecord record, VapObjectConfig vapObjectConfig, DateTimeOffset eventdt, Guid personVapObjectId)
     {
         // record.id = specify by StepDetails
         // record.event_id = specify by StepDetails
@@ -291,6 +296,7 @@ class VapPersonDetectionGenerator
         record.bbox_y1 = TblPersonAttributeEventRecord.BBOX_Y1;
         record.bbox_x2 = TblPersonAttributeEventRecord.BBOX_X2;
         record.bbox_y2 = TblPersonAttributeEventRecord.BBOX_Y2;
+        record.vap_object_id = personVapObjectId.ToString();
     }
 
     private void updateFrEventDef(TblPersonAttributeEventRecord record, Guid personVapObjectId)
