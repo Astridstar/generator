@@ -57,8 +57,21 @@ class VapPersonDetectionGenerator
     {
         using (var writer = new StreamWriter(@tblPersonAttributeEventCsvFilename))
         {
-            writer.WriteLine(VehicleRecord.getRecordHeader());
-            foreach (VehicleRecord record in _vehicleHub.Values)
+            writer.WriteLine(TblPersonAttributeEventRecord.getRecordHeader());
+            foreach (TblPersonAttributeEventRecord record in _vapPersonAttributeRecords)
+                writer.WriteLine(record.toCsvFormat());
+        }
+
+        using (var writer = new StreamWriter(@frEventDefCsvFilename))
+        {
+            writer.WriteLine(FrEventDefRecord.getRecordHeader());
+            foreach (FrEventDefRecord record in _vapFrEventDefRecords)
+                writer.WriteLine(record.toCsvFormat());
+        }
+        using (var writer = new StreamWriter(@frAlertCsvFilename))
+        {
+            writer.WriteLine(FrAlertDefRecord.getRecordHeader());
+            foreach (FrAlertDefRecord record in _vapFrAlertDefRecords)
                 writer.WriteLine(record.toCsvFormat());
         }
     }

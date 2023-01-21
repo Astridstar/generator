@@ -243,6 +243,6 @@ class ScenarioGenerator
     {
         _vapPersonDetectionGenerator.generateCsv(@Program.VAP_PERSON_ATTRIBUTE_EVENT_CSV_FULLPATH_FILE,
                                                  @Program.VAP_FR_EVENT_CSV_FULLPATH_FILE,
-                                                 @Program.VAP_FR_ALERT_CSV_FULLPATH_FILE)
+                                                 @Program.VAP_FR_ALERT_CSV_FULLPATH_FILE);
     }
 }

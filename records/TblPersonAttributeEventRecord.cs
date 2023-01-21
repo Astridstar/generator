@@ -214,7 +214,7 @@ class TblPersonAttributeEventRecord
         vap_object_id = "";
     }
 
-    public string getRecordHeader()
+    public static string getRecordHeader()
     {
         StringBuilder builder = new StringBuilder();
         builder.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9}",
