@@ -90,6 +90,7 @@ class ScenarioGenerator
         // Now generate the CSV data
         generatePeopleHubCsv(); // ICA PeopleHub
         generateVehicleHubCsv(); // LTA VehicleHub
+        generateVapCsv();
         return true;
     }
 
@@ -238,13 +239,10 @@ class ScenarioGenerator
                 writer.WriteLine(record.toCsvFormat());
         }
     }
-    private void generateTblPersonAttributeEventCsv()
+    private void generateVapCsv()
     {
-        // using (var writer = new StreamWriter(@Program.VAP_PERSON_ATTRIBUTE_EVENT_CSV_FULLPATH_FILE))
-        // {
-        //     writer.WriteLine(tbl_person_attribute_event_record.getRecordHeader());
-        //     foreach (VehicleRecord record in _vehicleHub.Values)
-        //         writer.WriteLine(record.toCsvFormat());
-        // }
+        _vapPersonDetectionGenerator.generateCsv(@Program.VAP_PERSON_ATTRIBUTE_EVENT_CSV_FULLPATH_FILE,
+                                                 @Program.VAP_FR_EVENT_CSV_FULLPATH_FILE,
+                                                 @Program.VAP_FR_ALERT_CSV_FULLPATH_FILE)
     }
 }

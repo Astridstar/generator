@@ -4,6 +4,21 @@ namespace records;
 
 class TblPersonAttributeEventRecord
 {
+    public static readonly string EVENT_TYPE_PERSON = "PERSON_ATTRIBUTE";
+    public static readonly string VA_PROVIDER_ID = "1";
+    public static readonly string VA_ENGINE_ID = "1";
+    public static readonly string VA_TYPE = "PAOD";
+    public static readonly string BBOX_X1 = "886";
+    public static readonly string BBOX_Y1 = "276";
+    public static readonly string BBOX_X2 = "1093";
+    public static readonly string BBOX_Y2 = "739";
+    public static Random _rand = new Random();
+    private static float _highCfdMinValue = 0.9f;
+    private static float _highCfdMaxValue = 1.0f;
+
+    private static float _lowCfdMinValue = 0.1f;
+    private static float _lowCfdMaxValue = 0.3f;
+
     public string id { get; set; }
     public string event_id { get; set; }
     public string event_type { get; set; }
@@ -98,6 +113,7 @@ class TblPersonAttributeEventRecord
     public string bbox_y1 { get; set; }
     public string bbox_x2 { get; set; }
     public string bbox_y2 { get; set; }
+    public string vap_object_id { get; set; }
 
     public TblPersonAttributeEventRecord()
     {
@@ -195,6 +211,7 @@ class TblPersonAttributeEventRecord
         bbox_y1 = "";
         bbox_x2 = "";
         bbox_y2 = "";
+        vap_object_id = "";
     }
 
     public string getRecordHeader()
@@ -308,11 +325,12 @@ class TblPersonAttributeEventRecord
             nameof(full_image_url),
             nameof(cropped_image_url)
         );
-        builder.AppendFormat("{90},{91},{92},{93}",
+        builder.AppendFormat("{90},{91},{92},{93},{94}",
             nameof(bbox_x1),
             nameof(bbox_y1),
             nameof(bbox_x2),
-            nameof(bbox_y2)
+            nameof(bbox_y2),
+            nameof(vap_object_id)
         );
         return builder.ToString();
 
@@ -433,12 +451,51 @@ class TblPersonAttributeEventRecord
             full_image_url,
             cropped_image_url
         );
-        builder.AppendFormat("{90},{91},{92},{93}",
+        builder.AppendFormat("{90},{91},{92},{93},{94}",
             bbox_x1,
             bbox_y1,
             bbox_x2,
-            bbox_y2
+            bbox_y2,
+            vap_object_id
         );
         return builder.ToString();
     }
+
+    public static string convertGender(string src)
+    {
+        if (String.IsNullOrEmpty(src))
+            return "UNKNOWN";
+
+        if (src.ToUpper().CompareTo("M") == 0)
+            return "MALE";
+        else if (src.ToUpper().CompareTo("F") == 0)
+            return "FEMALE";
+        else
+            return "UNKNOWN";
+    }
+    public static string getNextHighCfd()
+    {
+        return getNextCfd(_highCfdMinValue, _highCfdMaxValue);
+    }
+    public static string getNextLowCfd()
+    {
+        return getNextCfd(_lowCfdMinValue, _lowCfdMaxValue);
+    }
+    private static string getNextCfd(float min, float max)
+    {
+        return (_rand.NextSingle() * (max - min) + min).ToString();
+    }
+    public static string generateFullImageUrlPrefix(DateTimeOffset eventDt, string eventId, string vaProviderId)
+    {
+        StringBuilder builder = new();
+        builder.AppendFormat("/{0}/{1}/{2}/{3}/full/{4}", eventDt.Year, eventDt.Month, eventDt.Day, vaProviderId, eventId);
+        return builder.ToString();
+    }
+    public static string generateCroppedImageUrlPrefix(DateTimeOffset eventDt, string eventId, string vaProviderId)
+    {
+        StringBuilder builder = new();
+        builder.AppendFormat("/{0}/{1}/{2}/{3}/cropped/{4}", eventDt.Year, eventDt.Month, eventDt.Day, vaProviderId, eventId);
+        return builder.ToString();
+    }
+
 }
