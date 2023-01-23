@@ -1,6 +1,6 @@
 plate_number,make,model,iu_number,owner_nric,registration_dt,is_registered,deregistration_dt,is_foreign_car,vehicle_type,color
-SLZ774X,Nissan,March,UAQ05106WF,S9274095A,1958-03-29,1,,0,passenger,black
-SKF6226P,Honda,Cm 125,ZIY62616YU,S7800256E,1975-07-20,1,,0,passenger,black
-SKN8108S,Suzuki,Swift,AVJ43672IC,S9600005A,2004-03-11,1,,0,passenger,beige
-SKQ6867G,Suzuki,Wagon R Fx,SSJ74526PN,S9700005B,1954-01-31,1,,0,passenger,blue
-SMW6992Y,Toyota,Vios,WDE76580OL,S0400005C,1983-03-01,1,,0,passenger,red
+SLZ774X,Mazda,6,BCU11766FS,S9274095A,1997-03-17,1,,0,passenger,brown
+SKF6226P,TAFE,45DI,CKY30617LE,S7800256E,1959-03-27,1,,0,passenger,orange
+SKN8108S,Toyota,Hilux,DLK22043JP,S9600005A,1961-03-03,1,,0,passenger,purple
+SKQ6867G,Kia,Sportage,JPP31464JN,S9700005B,1969-11-12,1,,0,passenger,goid
+SMW6992Y,Ford,Ranger,KXI47173AV,S0400005C,1980-03-12,1,,0,passenger,red

@@ -207,7 +207,7 @@ class VapPersonDetectionGenerator
 
             // NRTIC found for the vap object so no need to generate fr_alert
             if (String.IsNullOrEmpty(personNric))
-                return;
+                continue;
 
             // Generate fr_alert
             updateFrAlertDef(record, personVapObjectId, personNric);
