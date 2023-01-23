@@ -1,0 +1,16 @@
+license_plate,make,model,color,class,has_known_owner,use_random_owners,is_friendly,is_plate_recognizable
+SKF6226P,TOYOTA,COROLLA ALTIS ,gray,car,y,n,y,y
+SKN8108S,NISSAN,QASHQAI,white,car,y,n,y,y
+SKQ6867G,Tesla,model S,white,car,y,n,y,y
+SMW6992Y,TOYOTA,VIOS ,black,car,y,n,y,y
+SKZ822C,B.M.W.,216I GRAN TOURER ,black,car,y,y,n,
+SLE709X,HONDA,VEZEL,red,car,y,y,n,
+SNB5582C,AUDI,A5 SPORTBACK ,white,car,y,y,n,
+SKR2784H,AUDI,Q3 SPORTBACK ,black,car,y,y,n,
+SDU272Z,AUDI,A6 DESIGN ,red,car,y,y,n,
+SKE735G,AUDI,A4 ,red,car,y,y,n,
+SLL4664C,AUDI,A4 ,orange,car,y,y,n,
+SMW5851C,AUDI,A4 ,silver,car,y,y,n,
+SMX1657T,AUDI,A3,gray,car,y,y,n,
+SKE3386K,B.M.W.,X3,white,car,y,y,n,
+SLT3363K,B.M.W.,X1 ,silver,car,y,y,n,
