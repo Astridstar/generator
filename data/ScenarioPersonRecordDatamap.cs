@@ -181,9 +181,9 @@ class ScenarioPersonRecord
     }
 }
 
-class ScenarioRecordMap : ClassMap<ScenarioPersonRecord>
+class ScenarioPersonRecordDatamap : ClassMap<ScenarioPersonRecord>
 {
-    public ScenarioRecordMap()
+    public ScenarioPersonRecordDatamap()
     {
         Map(p => p.sn).Index(0);
         Map(p => p.description).Index(1);

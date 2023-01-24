@@ -1,6 +1,6 @@
 plate_number,make,model,iu_number,owner_nric,registration_dt,is_registered,deregistration_dt,is_foreign_car,vehicle_type,color
-SLZ774X,Daihatsu,Charade,JTD17261FX,S9274095A,1963-12-31,1,,0,passenger,black
-SKF6226P,Bajaj,Discover 125,YTF21132BY,S7800256E,2010-04-15,1,,0,passenger,silver
-SKN8108S,Toyota,Aqua G Grade,WKP67554UP,S9600005A,1978-12-21,1,,0,passenger,silver
-SKQ6867G,TVS,Apache RTR 200,FNF37700IV,S9700005B,1973-06-03,1,,0,passenger,gray
-SMW6992Y,Suzuki,Alto,EBO06865CY,S0400005C,1952-04-17,1,,0,passenger,goid
+SLZ774X,Mitsubishi,Xpander,MHS80351KA,S9274095A,1968-05-16,1,,0,passenger,white
+SKF6226P,Land Rover,Defender,YCN31272UB,S7800256E,1997-03-12,1,,0,passenger,silver
+SKN8108S,Tata,Dimo Batta,JPM87845MJ,S9600005A,1986-06-22,1,,0,passenger,green
+SKQ6867G,Nissan,X-Trail,UCA01048PN,S9700005B,1974-04-13,1,,0,passenger,goid
+SMW6992Y,Suzuki,Wagon R FZ,QVK12426MK,S0400005C,1982-12-26,1,,0,passenger,white

@@ -14,6 +14,7 @@ namespace data
         private string _scenarioCsv = "";
         private string _vehicleMakeModelCsv = "";
         private string _acraDataCsv = "";
+        private string _scenarioVehicleCsv = "";
         public string Environment
         {
             get => _environment;
@@ -79,6 +80,11 @@ namespace data
         {
             get => _acraDataCsv;
             set => _acraDataCsv = value;
+        }
+        public string ScenarioVehicleCsv
+        {
+            get => _scenarioVehicleCsv;
+            set => _scenarioVehicleCsv = value;
         }
 
         public string VapObjectConfigCsv { get; set; }

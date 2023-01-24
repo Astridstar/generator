@@ -19,12 +19,29 @@ class VehicleRecord
     public string color { get; set; }
 
 
-
+    public VehicleRecord(string plateNo)
+    {
+        this.plate_number = plateNo;
+        this.owner_nric = "";
+        this.iu_number = _generator.getRandomIuNumber();
+    }
     public VehicleRecord(string plateNo, string ownerId)
     {
         this.plate_number = plateNo;
         this.owner_nric = ownerId;
         this.iu_number = _generator.getRandomIuNumber();
+    }
+    public void update(string make, string model, string color, string vehicleType)
+    {
+        //this.owner_nric = ownerId;
+        this.make = make;
+        this.model = model;
+        this.registration_dt = _generator.randomDateTime().ToString("yyyy-MM-dd");
+        this.is_registered = "1";
+        this.deregistration_dt = "";
+        this.is_foreign_car = "0";
+        this.vehicle_type = convert2LocalVehicleType(vehicleType);
+        this.color = color;
     }
     public void update(ref VehicleMakeModel genDs)
     {
@@ -36,6 +53,21 @@ class VehicleRecord
         this.is_foreign_car = "0";
         this.vehicle_type = "passenger";
         this.color = _generator.getRandomColors();
+    }
+    public void updateRegistrationState(string ownerId)
+    {
+        if (String.IsNullOrEmpty(ownerId))
+        {
+            this.owner_nric = "";
+            this.is_registered = "0";
+            this.deregistration_dt = _generator.randomDateTime().ToString("yyyy-MM-dd");
+        }
+        else
+        {
+            this.owner_nric = ownerId;
+            this.is_registered = "1";
+            this.registration_dt = _generator.randomDateTime().ToString("yyyy-MM-dd");
+        }
     }
     public string toCsvFormat()
     {
@@ -66,5 +98,16 @@ class VehicleRecord
             nameof(is_foreign_car),
             nameof(vehicle_type),
             nameof(color));
+    }
+    private string convert2LocalVehicleType(string vehicleType)
+    {
+        if (vehicleType.CompareTo("car") == 0)
+        {
+            return "passenger";
+        }
+        else
+        {
+            return "unknown";
+        }
     }
 }

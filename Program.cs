@@ -88,7 +88,7 @@ internal class Program
                                             ref randomHumanPropDs,
                                             ref parser,
                                             ref vehicleDs);
-        generator.generate(appConfig.ScenarioCsv);
+        generator.generate(appConfig.ScenarioCsv, appConfig.ScenarioVehicleCsv);
         #endregion
         Console.WriteLine("WE ARE DONE HERE !!!! Goodbye");
 

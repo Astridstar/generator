@@ -12,7 +12,8 @@ class ScenarioGenerator
 {
     Dictionary<string, PersonRecord> _peopleHub = new();
     Dictionary<string, VehicleRecord> _vehicleHub = new();
-    List<ScenarioPersonRecord> _scenarioRecords = new();
+    List<ScenarioPersonRecord> _scenarioPersonRecords = new();
+    List<ScenarioVehicleRecord> _scenarioVehicleRecords = new();
 
     IEnumerable<string>? _scenarioIdWithFamilies;
 
@@ -35,26 +36,37 @@ class ScenarioGenerator
         _vapConfig = vapConfig;
         _vapPersonDetectionGenerator = new();
     }
-    private void load(string filename)
+    private void load(string peopleFileName, string vehicleFileName)
     {
-        StreamReader reader = new StreamReader(filename);
+        using (StreamReader reader = new StreamReader(peopleFileName))
         {
             CsvReader csv = new CsvReader(reader, CultureInfo.InvariantCulture);
             if (csv == null)
                 return;
 
-            csv.Context.RegisterClassMap<ScenarioRecordMap>();
-            _scenarioRecords.AddRange(csv.GetRecords<ScenarioPersonRecord>().ToList());
+            csv.Context.RegisterClassMap<ScenarioPersonRecordDatamap>();
+            _scenarioPersonRecords.AddRange(csv.GetRecords<ScenarioPersonRecord>().ToList());
         }
+
+        using (StreamReader reader = new StreamReader(vehicleFileName))
+        {
+            CsvReader csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            if (csv == null)
+                return;
+
+            csv.Context.RegisterClassMap<ScenarioVehicleRecordDatamap>();
+            _scenarioVehicleRecords.AddRange(csv.GetRecords<ScenarioVehicleRecord>().ToList());
+        }
+
 
         _vapPersonDetectionGenerator.load(ref _vapConfig);
     }
 
-    public bool generate(string scenariofile)
+    public bool generate(string peopleFileName, string vehicleFileName)
     {
         try
         {
-            load(scenariofile);
+            load(peopleFileName, vehicleFileName);
         }
         catch (Exception e)
         {
@@ -63,7 +75,7 @@ class ScenarioGenerator
         }
 
         // Nothing to generate
-        if (_scenarioRecords.Count <= 0) return false;
+        if (_scenarioPersonRecords.Count <= 0) return false;
 
         #region Generate data
         //1. Generate people_hub
@@ -98,7 +110,7 @@ class ScenarioGenerator
     private void generatePeopleInScenario()
     {
         // Create PersonRecord for each person specified in the scenario 
-        foreach (ScenarioPersonRecord record in _scenarioRecords)
+        foreach (ScenarioPersonRecord record in _scenarioPersonRecords)
         {
             string addr = "";
             string post = "";
@@ -106,6 +118,8 @@ class ScenarioGenerator
             _peopleHub.Add(record.id,
             new PersonRecord(record, addr, post, _randHumanPropDs.getNextEmail(), "", _randHumanPropDs.getNextMobileNumber()));
         }
+
+        if (_peopleHub.Count <= 0) return;
 
         // Find all the persons that have family members specified
         _scenarioIdWithFamilies = from person in _peopleHub.Values
@@ -160,6 +174,31 @@ class ScenarioGenerator
     }
     private void generateVehiclesInScenario()
     {
+        // Create the vehicle records 
+        foreach (ScenarioVehicleRecord scnVeh in _scenarioVehicleRecords)
+        {
+            VehicleRecord record = new VehicleRecord(scnVeh.license_plate);
+            record.update(scnVeh.make, scnVeh.model, scnVeh.color, scnVeh.vehicle_class);
+            _vehicleHub.Add(record.plate_number, record);
+        }
+
+        // Find the people who owns vehicle and update the vehicle owner id 
+        // grab license plate set
+        var ownedVehicles = from person in _peopleHub.Values
+                            where !String.IsNullOrEmpty(person.car_plate)
+                            select (person.car_plate, person.id);
+
+        if (ownedVehicles != null && ownedVehicles.Count() > 0)
+        {
+            foreach (var veh in ownedVehicles)
+            {
+                if (_vehicleHub.ContainsKey(veh.car_plate))
+                    _vehicleHub[veh.car_plate].owner_nric = veh.id;
+            }
+        }
+    }
+    private void generatePeopleVehicleRelationship()
+    {
         // grab license plate set
         var scenarioVehicles = from person in _peopleHub.Values
                                where !String.IsNullOrEmpty(person.car_plate)
@@ -180,11 +219,6 @@ class ScenarioGenerator
                 _vehicleHub.Add(veh.car_plate, record);
             }
         }
-        // generate the LTA vehicle hub
-    }
-    private void generatePeopleVehicleRelationship()
-    {
-
     }
     private string retrieveIdWithVehicle(string plateNo)
     {
@@ -215,7 +249,7 @@ class ScenarioGenerator
 
         //_vapPersonDetectionGenerator
 
-        IEnumerable<string> friendlyList = from record in _scenarioRecords
+        IEnumerable<string> friendlyList = from record in _scenarioPersonRecords
                                            where (record.friendly.CompareTo("y") == 0)
                                            select record.id;
 
