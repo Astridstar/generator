@@ -66,7 +66,7 @@ class AddressesParser
                         }
                         string addrToken = child.SelectToken(_addressToken).Value<string>();
                         string postToken = child.SelectToken(_postalCodeToken).Value<string>();
-                        Console.WriteLine("{0}, {1}", addrToken, postToken);
+                        //Console.WriteLine("{0}, {1}", addrToken, postToken);
                         addresses.Add(new AddressRecord(addrToken, postToken));
                     }
                     return addresses;

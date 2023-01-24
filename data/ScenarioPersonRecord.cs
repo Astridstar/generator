@@ -2,7 +2,7 @@ namespace data;
 
 using CsvHelper.Configuration;
 
-class ScenarioRecord
+class ScenarioPersonRecord
 {
     string _sn = "";
     string _description = "";
@@ -181,7 +181,7 @@ class ScenarioRecord
     }
 }
 
-class ScenarioRecordMap : ClassMap<ScenarioRecord>
+class ScenarioRecordMap : ClassMap<ScenarioPersonRecord>
 {
     public ScenarioRecordMap()
     {

@@ -71,7 +71,7 @@ internal class Program
             List<AddressesParser.AddressRecord> addresses = new();
             foreach (string jsonfile in appConfig.AddressesJsonFiles)
             {
-                Console.WriteLine("Processing address configuration file {0}", jsonfile);
+                //Console.WriteLine("Processing address configuration file {0}", jsonfile);
                 addresses.AddRange(parser.parse(jsonfile));
             }
             parser.generateCsv(ADDRESSES_CSV_FULLPATH_FILE, addresses);
@@ -90,5 +90,7 @@ internal class Program
                                             ref vehicleDs);
         generator.generate(appConfig.ScenarioCsv);
         #endregion
+        Console.WriteLine("WE ARE DONE HERE !!!! Goodbye");
+
     }
 }

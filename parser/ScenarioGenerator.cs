@@ -12,7 +12,7 @@ class ScenarioGenerator
 {
     Dictionary<string, PersonRecord> _peopleHub = new();
     Dictionary<string, VehicleRecord> _vehicleHub = new();
-    List<ScenarioRecord> _scenarioRecords = new();
+    List<ScenarioPersonRecord> _scenarioRecords = new();
 
     IEnumerable<string>? _scenarioIdWithFamilies;
 
@@ -44,7 +44,7 @@ class ScenarioGenerator
                 return;
 
             csv.Context.RegisterClassMap<ScenarioRecordMap>();
-            _scenarioRecords.AddRange(csv.GetRecords<ScenarioRecord>().ToList());
+            _scenarioRecords.AddRange(csv.GetRecords<ScenarioPersonRecord>().ToList());
         }
 
         _vapPersonDetectionGenerator.load(ref _vapConfig);
@@ -72,6 +72,7 @@ class ScenarioGenerator
 
         //3. Generate vehicle
         generateVehiclesInScenario();
+        generatePeopleVehicleRelationship();
 
         //4. Generate employer
 
@@ -96,7 +97,8 @@ class ScenarioGenerator
 
     private void generatePeopleInScenario()
     {
-        foreach (ScenarioRecord record in _scenarioRecords)
+        // Create PersonRecord for each person specified in the scenario 
+        foreach (ScenarioPersonRecord record in _scenarioRecords)
         {
             string addr = "";
             string post = "";
@@ -105,6 +107,7 @@ class ScenarioGenerator
             new PersonRecord(record, addr, post, _randHumanPropDs.getNextEmail(), "", _randHumanPropDs.getNextMobileNumber()));
         }
 
+        // Find all the persons that have family members specified
         _scenarioIdWithFamilies = from person in _peopleHub.Values
                                   where (!String.IsNullOrEmpty(person.father_id) ||
                                          !String.IsNullOrEmpty(person.mother_id) ||
@@ -117,11 +120,7 @@ class ScenarioGenerator
                                          !String.IsNullOrEmpty(person.child3_id))
                                   select person.id;
 
-        formFamilyRelationsInScenario();
-    }
-
-    private void formFamilyRelationsInScenario()
-    {
+        // Now find the ID of the family members base on names specified in the scenario configurations
         if (_scenarioIdWithFamilies != null && _scenarioIdWithFamilies.Count() > 0 && _peopleHub != null)
         {
             // for each person find the id of family members
@@ -141,6 +140,8 @@ class ScenarioGenerator
         }
     }
 
+    // Find the ID of the person who has the specified "fullname". 
+    // "relationship" is used for logging purposes only
     private string retrieveIdWithFullname(string fullname, string relationship)
     {
         String retirevedId = "";
@@ -166,7 +167,7 @@ class ScenarioGenerator
 
         if (scenarioVehicles != null && scenarioVehicles.Count() > 0)
         {
-            // for each person find the id of family members
+
             foreach (var veh in scenarioVehicles)
             {
                 VehicleRecord record = new VehicleRecord(veh.car_plate, veh.id);
@@ -180,6 +181,10 @@ class ScenarioGenerator
             }
         }
         // generate the LTA vehicle hub
+    }
+    private void generatePeopleVehicleRelationship()
+    {
+
     }
     private string retrieveIdWithVehicle(string plateNo)
     {

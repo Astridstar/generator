@@ -85,7 +85,7 @@ class PersonRecord
         nameof(child3_id));
     }
 
-    public PersonRecord(ScenarioRecord data, string addr, string postal, string email1, string email2, string mobile)
+    public PersonRecord(ScenarioPersonRecord data, string addr, string postal, string email1, string email2, string mobile)
     {
         this.sn = data.sn;
         this.gender = data.gender;
