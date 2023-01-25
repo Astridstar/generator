@@ -7,6 +7,7 @@ internal class VapConfig
     public string CameraListCsv { get; init; }
     public string PersonMovementCsv { get; init; }
     public string VehicleMovementCsv { get; init; }
+    public string ScenarioOccuranceDateTime { get; init}
 
     public VapConfig()
     {
@@ -15,6 +16,16 @@ internal class VapConfig
         CameraListCsv = "";
         PersonMovementCsv = "";
         VehicleMovementCsv = "";
+        ScenarioOccuranceDateTime = "";
+    }
+
+    public DateTimeOffset getScenarioOccuranceDateTime()
+    {
+        DateTimeOffset dto;
+        if (!DateTimeOffset.TryParse(ScenarioOccuranceDateTime, out dto))
+            dto = DateTimeOffset.Now;
+
+        return dto;
     }
 
 }
