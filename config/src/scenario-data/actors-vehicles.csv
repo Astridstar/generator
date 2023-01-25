@@ -1,16 +1,17 @@
 license_plate,make,model,color,vehicle_class,use_random_owners,is_friendly
-SKF6226P,TOYOTA,COROLLA ALTIS ,gray,car,n,y
-SKN8108S,NISSAN,QASHQAI,white,car,n,y
-SKQ6867G,Tesla,model S,white,car,n,y
-SMW6992Y,TOYOTA,VIOS ,black,car,n,y
+SKF6226P,TOYOTA,COROLLA ALTIS ,gray,sedan,n,n
+SKN8108S,NISSAN,QASHQAI,white,suv,n,n
+SKQ6867G,Tesla,model S,white,sedan,n,y
+SMW6992Y,TOYOTA,VIOS ,black,sedan,n,y
+SLZ774X,B.M.W.,X1 ,black,suv,n,n
 SKZ822C,B.M.W.,216I GRAN TOURER ,black,car,y,n
-SLE709X,HONDA,VEZEL,red,car,y,n
-SNB5582C,AUDI,A5 SPORTBACK ,white,car,y,n
-SKR2784H,AUDI,Q3 SPORTBACK ,black,car,y,n
-SDU272Z,AUDI,A6 DESIGN ,red,car,y,n
-SKE735G,AUDI,A4 ,red,car,y,n
-SLL4664C,AUDI,A4 ,orange,car,y,n
-SMW5851C,AUDI,A4 ,silver,car,y,n
-SMX1657T,AUDI,A3,gray,car,y,n
-SKE3386K,B.M.W.,X3,white,car,y,n
-SLT3363K,B.M.W.,X1 ,silver,car,y,n
+SLE709X,HONDA,VEZEL,red,mpv,y,n
+SNB5582C,AUDI,A5 SPORTBACK ,white,sedan,y,n
+SKR2784H,AUDI,Q3 SPORTBACK ,black,suv,y,n
+SDU272Z,AUDI,A6 DESIGN ,red,sedan,y,n
+SKE735G,AUDI,A4 ,red,sedan,y,n
+SLL4664C,AUDI,A4 ,orange,sedan,y,n
+SMW5851C,AUDI,A4 ,silver,sedan,y,n
+SMX1657T,AUDI,A3,gray,hatchback,y,n
+SKE3386K,B.M.W.,X3,white,suv,y,n
+SLT3363K,B.M.W.,X1 ,silver,suv,y,n

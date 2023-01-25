@@ -23,7 +23,7 @@ class ScenarioGenerator
     VehicleMakeModelDataset _vehicleSrcDs;
 
     VapConfig _vapConfig;
-    VapPersonDetectionGenerator _vapPersonDetectionGenerator;
+    VapDetectionGenerator _vapDetectionGenerator;
 
     PersonDataGenerator _personGenerator;
 
@@ -38,7 +38,7 @@ class ScenarioGenerator
         _addressParser = parser;
         _vehicleSrcDs = vehicleSrcDs;
         _vapConfig = vapConfig;
-        _vapPersonDetectionGenerator = new();
+        _vapDetectionGenerator = new();
         _personGenerator = new(_addressParser, _randHumanPropDs, countryDs, personDataset);
     }
     private void load(string peopleFileName, string vehicleFileName)
@@ -64,7 +64,7 @@ class ScenarioGenerator
         }
 
 
-        _vapPersonDetectionGenerator.load(ref _vapConfig);
+        _vapDetectionGenerator.load(ref _vapConfig);
     }
 
     public bool generate(string peopleFileName, string vehicleFileName)
@@ -86,22 +86,16 @@ class ScenarioGenerator
         //1. Generate people_hub
         //2. Generate family
         generatePeopleInScenario();
-
         //3. Generate vehicle
         generateVehiclesInScenario();
-        //generatePeopleVehicleRelationship();
-
         //4. Generate employer
-
-        //5. Generate friendly
+        //5. Generate friendly person
         generateVapFriendlies();
         generateVapUnknownFriendlies();
+        //6. Generate friendly vehicles
         generateVapFriendliesVehicle();
-
-        //6. Generate blacklisted person
-        //7. Generate blacklisted vehicle
-
-        //8. Generate unknown friendlies
+        //7. Generate blacklisted person
+        //8. Generate blacklisted vehicle
         #endregion
 
         generateDefaltPeopleRecords();
@@ -221,29 +215,6 @@ class ScenarioGenerator
             _vehicleHub.Add(vehicle.plate_number, vehicle);
         }
     }
-    private void generatePeopleVehicleRelationship()
-    {
-        // grab license plate set
-        // var scenarioVehicles = from person in _peopleHub.Values
-        //                        where !String.IsNullOrEmpty(person.car_plate)
-        //                        select (person.car_plate, person.id);
-
-        // if (scenarioVehicles != null && scenarioVehicles.Count() > 0)
-        // {
-
-        //     foreach (var veh in scenarioVehicles)
-        //     {
-        //         VehicleRecord record = new VehicleRecord(veh.car_plate, veh.id);
-        //         VehicleMakeModel? generatedDetails = null;
-        //         _vehicleSrcDs.getRandomRecord(out generatedDetails);
-        //         if (generatedDetails != null)
-        //         {
-        //             record.update(ref generatedDetails);
-        //         }
-        //         _vehicleHub.Add(veh.car_plate, record);
-        //     }
-        // }
-    }
     private string retrieveIdWithVehicle(string plateNo)
     {
         String retirevedId = "";
@@ -286,24 +257,26 @@ class ScenarioGenerator
         // Load movement configs
         // Load movements 
         // Load defaults
-
-        //_vapPersonDetectionGenerator
-
         IEnumerable<string> friendlyList = from record in _scenarioPersonRecords
                                            where (record.friendly.CompareTo("y") == 0)
                                            select record.id;
-
-        _vapPersonDetectionGenerator.generateFriendliesInNeighborhood(friendlyList);
+        _vapDetectionGenerator.generateFriendliesInNeighborhood(friendlyList);
     }
 
     private void generateVapUnknownFriendlies()
     {
-        _vapPersonDetectionGenerator.generateUnknownFriendlies();
+        _vapDetectionGenerator.generateUnknownFriendlies();
     }
 
     public void generateVapFriendliesVehicle()
     {
-
+        IEnumerable<VehicleDetails>? friendlyList = _scenarioVehicleRecords.Where(x => x.is_friendly.CompareTo("y") == 0)
+                                         .Select(x =>
+                                         {
+                                             VehicleDetails detail = new(x.license_plate, x.make, x.model, x.color, x.vehicle_class);
+                                             return detail;
+                                         });
+        _vapDetectionGenerator.generateFriendliesVehicleiInNeighborhood(friendlyList);
     }
     private void generatePeopleHubCsv()
     {
@@ -325,7 +298,8 @@ class ScenarioGenerator
     }
     private void generateVapCsv()
     {
-        _vapPersonDetectionGenerator.generateCsv(@Program.VAP_PERSON_ATTRIBUTE_EVENT_CSV_FULLPATH_FILE,
+        _vapDetectionGenerator.generateCsv(@Program.VAP_PERSON_ATTRIBUTE_EVENT_CSV_FULLPATH_FILE,
+                                                 @Program.VAP_VEHICLE_ATTRIBUTE_EVENT_CSV_FULLPATH_FILE,
                                                  @Program.VAP_FR_EVENT_CSV_FULLPATH_FILE,
                                                  @Program.VAP_FR_ALERT_CSV_FULLPATH_FILE);
     }

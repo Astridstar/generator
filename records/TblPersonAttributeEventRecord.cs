@@ -497,5 +497,4 @@ class TblPersonAttributeEventRecord
         builder.AppendFormat("/{0}/{1}/{2}/{3}/cropped/{4}", eventDt.Year, eventDt.Month, eventDt.Day, vaProviderId, eventId);
         return builder.ToString();
     }
-
 }

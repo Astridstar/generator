@@ -3,13 +3,13 @@ namespace data;
 using CsvHelper;
 using System.Globalization;
 
-internal class PersonMovementDataset
+internal class VapObjectMovementDataset
 {
-    List<PersonMovement> _personMovementList = new();
+    List<VapObjectMovement> _vapObjMovementList = new();
 
-    public List<PersonMovement> PersonMovementList
+    public List<VapObjectMovement> VapObjectMovementList
     {
-        get { return _personMovementList; }
+        get { return _vapObjMovementList; }
     }
     public void load(string filename)
     {
@@ -24,8 +24,8 @@ internal class PersonMovementDataset
             if (csv == null)
                 return;
 
-            csv.Context.RegisterClassMap<PersonMovementDatamap>();
-            _personMovementList.AddRange(csv.GetRecords<PersonMovement>().ToList());
+            csv.Context.RegisterClassMap<VapObjectMovementDatamap>();
+            _vapObjMovementList.AddRange(csv.GetRecords<VapObjectMovement>().ToList());
         }
     }
 

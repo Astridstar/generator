@@ -2,13 +2,13 @@ namespace data;
 
 using CsvHelper.Configuration;
 
-internal class PersonMovement
+internal class VapObjectMovement
 {
     public string camera_name { get; set; }
     public string forward_time_s { get; set; }
     public string backward_time_s { get; set; }
 
-    public PersonMovement()
+    public VapObjectMovement()
     {
         camera_name = "";
         forward_time_s = "";
@@ -17,9 +17,9 @@ internal class PersonMovement
 
 }
 
-internal class PersonMovementDatamap : ClassMap<PersonMovement>
+internal class VapObjectMovementDatamap : ClassMap<VapObjectMovement>
 {
-    public PersonMovementDatamap()
+    public VapObjectMovementDatamap()
     {
         Map(p => p.camera_name).Index(0);
         Map(p => p.forward_time_s).Index(1);

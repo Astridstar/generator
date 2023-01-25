@@ -13,6 +13,7 @@ internal class Program
     public static readonly string PEOPLE_HUB_CSV_FULLPATH_FILE = @"./config/generated/icsPeopleHub.csv";
     public static readonly string VEHICLE_HUB_CSV_FULLPATH_FILE = @"./config/generated/ltaVehicleHub.csv";
     public static readonly string VAP_PERSON_ATTRIBUTE_EVENT_CSV_FULLPATH_FILE = @"./config/generated/tbl_person_attribute_event.csv";
+    public static readonly string VAP_VEHICLE_ATTRIBUTE_EVENT_CSV_FULLPATH_FILE = @"./config/generated/tbl_vehicle_attribute_event.csv";
     public static readonly string VAP_FR_EVENT_CSV_FULLPATH_FILE = @"./config/generated/fr_event.csv";
     public static readonly string VAP_FR_ALERT_CSV_FULLPATH_FILE = @"./config/generated/fr_alert.csv";
 

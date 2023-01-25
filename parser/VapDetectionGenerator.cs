@@ -3,41 +3,21 @@ namespace parser;
 using CsvHelper;
 using data;
 using records;
-class VapPersonDetectionGenerator
-{
-    // id
-    // eventid
-    // event_dt
-    // device_id
-    internal protected class StepDetails
-    {
-        public long id { get; set; }
-        public string eventId { get; set; }
-        public DateTimeOffset eventDt { get; set; }
-        public string deviceId { get; set; }
 
-        public StepDetails(long id, string eventId, DateTimeOffset eventDt, string deviceId)
-        {
-            this.id = id;
-            this.eventId = eventId;
-            this.eventDt = eventDt;
-            this.deviceId = deviceId;
-        }
-    }
+partial class VapDetectionGenerator
+{
 
     VapObjectConfigDataset _vapConfigDs = new();
-    PersonMovementDataset _personMovementDs = new();
+    VapObjectMovementDataset _personMovementDs = new();
     DeviceDefinitionDataset _deviceDefinitionDs = new();
-
+    VapObjectMovementDataset _vehicleMovementDs = new();
     List<TblPersonAttributeEventRecord> _vapPersonAttributeRecords = new();
+    List<TblVehicleAttributeEventRecord> _vapVehicleAttributeRecords = new();
     List<FrEventDefRecord> _vapFrEventDefRecords = new();
     List<FrAlertDefRecord> _vapFrAlertDefRecords = new();
-
-
-    public VapPersonDetectionGenerator()
+    public VapDetectionGenerator()
     {
     }
-
     public void load(ref VapConfig vapConfig)
     {
         try
@@ -45,6 +25,7 @@ class VapPersonDetectionGenerator
             _vapConfigDs.load(vapConfig.VapObjectConfigCsv);
             _personMovementDs.load(vapConfig.PersonMovementCsv);
             _deviceDefinitionDs.load(vapConfig.DeviceDefinitionCsv);
+            _vehicleMovementDs.load(vapConfig.VehicleMovementCsv);
         }
         catch (Exception ex)
         {
@@ -52,8 +33,7 @@ class VapPersonDetectionGenerator
             throw;
         }
     }
-
-    public void generateCsv(string tblPersonAttributeEventCsvFilename, string frEventDefCsvFilename, string frAlertCsvFilename)
+    public void generateCsv(string tblPersonAttributeEventCsvFilename, string tblVehicleAttributeEventCsvFilename, string frEventDefCsvFilename, string frAlertCsvFilename)
     {
         using (var writer = new StreamWriter(@tblPersonAttributeEventCsvFilename))
         {
@@ -61,7 +41,12 @@ class VapPersonDetectionGenerator
             foreach (TblPersonAttributeEventRecord record in _vapPersonAttributeRecords)
                 writer.WriteLine(record.toCsvFormat());
         }
-
+        using (var writer = new StreamWriter(@tblVehicleAttributeEventCsvFilename))
+        {
+            writer.WriteLine(TblVehicleAttributeEventRecord.getRecordHeader());
+            foreach (TblVehicleAttributeEventRecord record in _vapVehicleAttributeRecords)
+                writer.WriteLine(record.toCsvFormat());
+        }
         using (var writer = new StreamWriter(@frEventDefCsvFilename))
         {
             writer.WriteLine(FrEventDefRecord.getRecordHeader());
@@ -83,9 +68,23 @@ class VapPersonDetectionGenerator
         if (friendlyList == null)
             return;
 
+        List<StepDetails>? steps = null;
+        // Generate tbl_person_attribute_event records
+        // Now grab those dynamic variables per detection/step in the 
+        // tbl_person_attribute_event record to be generated
+        // id
+        // eventid
+        // event_dt
+        // device_id           
+        generateMovementRecords(_personMovementDs, out steps, startdt);
+        if (steps == null)
+        {
+            Console.WriteLine("No person movement defined for generation.  Unable to generate records for tbl_person_attribute_event for ID");
+            return;
+        }
+
         foreach (string nric in friendlyList)
         {
-            List<StepDetails>? steps = null;
             VapObjectConfig? vapObjectConfig = null;
 
             _vapConfigDs.getVapObjectConfig(out vapObjectConfig, nric);
@@ -96,21 +95,6 @@ class VapPersonDetectionGenerator
             }
             // Generate a Guid as a reference/VAP ID for each person that was detected in VAP
             personVapObjectId[nric] = Guid.NewGuid();
-
-            // Generate tbl_person_attribute_event records
-            // Now grab those dynamic variables per detection/step in the 
-            // tbl_person_attribute_event record to be generated
-            // id
-            // eventid
-            // event_dt
-            // device_id           
-            generatePersonMovementRecord(vapObjectConfig, out steps, startdt);
-
-            if (steps == null)
-            {
-                Console.WriteLine("No person movement defined for generation.  Unable to generate records for tbl_person_attribute_event for ID {0}", vapObjectConfig.known_id);
-                return;
-            }
 
             // Now create the tbl_person_attribute_event rows and populate
             // the record with the vapobject config parameters
@@ -131,29 +115,47 @@ class VapPersonDetectionGenerator
 
         Guid vapObjectId = Guid.NewGuid();
         DateTimeOffset startdt = DateTimeOffset.Now.Subtract(new TimeSpan(10, 0, 0, 0));
+        // Generate tbl_person_attribute_event records
+        // Now grab those dynamic variables per detection/step in the 
+        // tbl_person_attribute_event record to be generated
+        // id
+        // eventid
+        // event_dt
+        // device_id           
+        generateMovementRecords(_personMovementDs, out steps, startdt);
+        if (steps == null)
+        {
+            Console.WriteLine("No person movement defined for generation.  Unable to generate records for unidentifiable person in tbl_person_attribute_event for ID.");
+            return;
+        }
         foreach (VapObjectConfig vapObject in vapObjectList)
         {
-            // Generate tbl_person_attribute_event records
-            // Now grab those dynamic variables per detection/step in the 
-            // tbl_person_attribute_event record to be generated
-            // id
-            // eventid
-            // event_dt
-            // device_id           
-            generatePersonMovementRecord(vapObject, out steps, startdt);
-            if (steps == null)
-            {
-                Console.WriteLine("No person movement defined for generation.  Unable to generate records for unidentifiable person in tbl_person_attribute_event for ID.");
-                break;
-            }
             // Now create the tbl_person_attribute_event rows and populate
             // the record with the vapobject config parameters
             generateVapPersonRecords(steps, vapObject, vapObjectId, "");
         }
     }
-    private void generatePersonMovementRecord(VapObjectConfig vapObjectConfig, out List<StepDetails>? steps, DateTimeOffset srcstartdt)
+    public void generateFriendliesVehicleiInNeighborhood(IEnumerable<VehicleDetails>? friendlyList)
     {
-        if (_personMovementDs.PersonMovementList.Count <= 0)
+        DateTimeOffset startdt = DateTimeOffset.Now.Subtract(new TimeSpan(10, 0, 0, 0));
+        Dictionary<string, Guid> vehicleVapObjectId = new();
+        if (friendlyList == null)
+            return;
+
+        generateMovementRecords(_vehicleMovementDs, out List<StepDetails>? steps, startdt);
+        if (steps == null)
+        {
+            Console.WriteLine("No vehicle movement defined for generation.  Unable to generate records for vehicles in tbl_vehicle_attribute_event.");
+            return;
+        }
+        foreach (VehicleDetails veh in friendlyList)
+        {
+            generateVapVehicleRecords(steps, veh.license_plate, veh.color, veh.make, veh.model, veh.vehicle_class, Guid.NewGuid());
+        }
+    }
+    private void generateMovementRecords(VapObjectMovementDataset movementDs, out List<StepDetails>? steps, DateTimeOffset srcstartdt)
+    {
+        if (movementDs.VapObjectMovementList.Count <= 0)
         {
             steps = null;
             return;
@@ -164,9 +166,9 @@ class VapPersonDetectionGenerator
         for (int dailyOccurrence = 0; dailyOccurrence < 10; dailyOccurrence++)
         {
             startingDt = srcstartdt.AddDays(dailyOccurrence);
-            for (int i = 0; i < _personMovementDs.PersonMovementList.Count; i++)
+            for (int i = 0; i < movementDs.VapObjectMovementList.Count; i++)
             {
-                string cameraName = _personMovementDs.PersonMovementList[i].camera_name;
+                string cameraName = movementDs.VapObjectMovementList[i].camera_name;
                 string? deviceRefId = _deviceDefinitionDs.getDeviceRefId(cameraName);
                 if (String.IsNullOrEmpty(deviceRefId))
                 {
@@ -175,14 +177,14 @@ class VapPersonDetectionGenerator
                 }
                 steps.Add(new StepDetails(UnqiueIdFactory.Instance.getNextId(),
                 Guid.NewGuid().ToString(),
-                startingDt.AddSeconds(ConvertToDouble(_personMovementDs.PersonMovementList[i].forward_time_s)),
+                startingDt.AddSeconds(ConvertToDouble(movementDs.VapObjectMovementList[i].forward_time_s)),
                 deviceRefId));
             }
 
             startingDt = startingDt.AddHours(2);
-            for (int i = _personMovementDs.PersonMovementList.Count - 1; i >= 0; i--)
+            for (int i = movementDs.VapObjectMovementList.Count - 1; i >= 0; i--)
             {
-                string cameraName = _personMovementDs.PersonMovementList[i].camera_name;
+                string cameraName = movementDs.VapObjectMovementList[i].camera_name;
                 string? deviceRefId = _deviceDefinitionDs.getDeviceRefId(cameraName);
                 if (String.IsNullOrEmpty(deviceRefId))
                 {
@@ -191,7 +193,7 @@ class VapPersonDetectionGenerator
                 }
                 steps.Add(new StepDetails(UnqiueIdFactory.Instance.getNextId(),
                 Guid.NewGuid().ToString(),
-                startingDt.AddSeconds(ConvertToDouble(_personMovementDs.PersonMovementList[i].backward_time_s)),
+                startingDt.AddSeconds(ConvertToDouble(movementDs.VapObjectMovementList[i].backward_time_s)),
                 deviceRefId));
             }
         }
@@ -214,6 +216,45 @@ class VapPersonDetectionGenerator
 
             // Generate fr_alert
             updateFrAlertDef(record, personVapObjectId, personNric);
+        }
+    }
+    private void generateVapVehicleRecords(List<StepDetails> steps, string license_plate, string color, string make, string model, string vehicle_class, Guid vap_object_id)
+    {
+        foreach (StepDetails step in steps)
+        {
+            TblVehicleAttributeEventRecord record = new();
+            record.id = step.id.ToString();
+            record.event_id = step.eventId;
+            record.device_id = step.deviceId;
+            record.event_dt = step.eventDt.ToString("yyyy-MM-dd HH:mm:ss");
+            record.event_type = TblVehicleAttributeEventRecord.VEH_EVENT_TYPE;
+            record.va_provider_name = TblVehicleAttributeEventRecord.VA_PROVIDER_NAME;
+            record.va_engine_code = TblVehicleAttributeEventRecord.VA_ENGINE_CODE;
+            record.va_type_code = TblVehicleAttributeEventRecord.VA_TYPE_CODE;
+            record.vehicle_make = make;
+            record.vehicle_make_cfd = (String.IsNullOrEmpty(record.vehicle_make) || record.vehicle_make.CompareTo("0") == 0) ? "0" : TblVehicleAttributeEventRecord.getNextHighCfd();
+            record.vehicle_model = model;
+            record.vehicle_model_cfd = (String.IsNullOrEmpty(record.vehicle_model) || record.vehicle_model.CompareTo("0") == 0) ? "0" : TblVehicleAttributeEventRecord.getNextHighCfd();
+            record.vehicle_colour = color;
+            record.vehicle_colour_cfd = (String.IsNullOrEmpty(record.vehicle_colour) || record.vehicle_colour.CompareTo("0") == 0) ? "0" : TblVehicleAttributeEventRecord.getNextHighCfd();
+            record.vehicle_class = convertLtaVehicleType2Vap(vehicle_class);
+            record.vehicle_class_cfd = (String.IsNullOrEmpty(record.vehicle_class) || record.vehicle_class.CompareTo("0") == 0) ? "0" : TblVehicleAttributeEventRecord.getNextHighCfd();
+            record.vehicle_angle = "ST_FRONT";
+            record.vehicle_angle_cfd = (String.IsNullOrEmpty(record.vehicle_angle) || record.vehicle_angle.CompareTo("0") == 0) ? "0" : TblVehicleAttributeEventRecord.getNextHighCfd();
+            record.plate_number = license_plate;
+            record.plate_number_cfd = (String.IsNullOrEmpty(record.plate_number) || record.plate_number.CompareTo("0") == 0) ? "0" : TblVehicleAttributeEventRecord.getNextHighCfd();
+            record.plate_colour = "";
+            record.plate_colour_cfd = "0";
+            record.plate_colour_scheme = "";
+            record.plate_vehicle_class = "";
+            record.full_image_url = TblPersonAttributeEventRecord.generateFullImageUrlPrefix(step.eventDt, record.event_id, record.va_engine_code);
+            record.cropped_image_url = TblPersonAttributeEventRecord.generateCroppedImageUrlPrefix(step.eventDt, record.event_id, record.va_engine_code);
+            record.bbox_x1 = TblVehicleAttributeEventRecord.BBOX_X1;
+            record.bbox_y1 = TblVehicleAttributeEventRecord.BBOX_Y1;
+            record.bbox_x2 = TblVehicleAttributeEventRecord.BBOX_X2;
+            record.bbox_y2 = TblVehicleAttributeEventRecord.BBOX_Y2;
+            record.vap_object_id = vap_object_id.ToString();
+            _vapVehicleAttributeRecords.Add(record);
         }
     }
     public static double ConvertToDouble(string Value)
@@ -339,7 +380,6 @@ class VapPersonDetectionGenerator
         record.bbox_y2 = TblPersonAttributeEventRecord.BBOX_Y2;
         record.vap_object_id = personVapObjectId.ToString();
     }
-
     private void updateFrEventDef(TblPersonAttributeEventRecord record, Guid personVapObjectId)
     {
         FrEventDefRecord eventDef = new();
@@ -359,7 +399,6 @@ class VapPersonDetectionGenerator
         eventDef.vap_object_id = personVapObjectId.ToString();
         _vapFrEventDefRecords.Add(eventDef);
     }
-
     private void updateFrAlertDef(TblPersonAttributeEventRecord record, Guid personVapObjectId, string personNric)
     {
         FrAlertDefRecord alertDefRecord = new();
@@ -372,5 +411,38 @@ class VapPersonDetectionGenerator
         alertDefRecord.info = "";
         alertDefRecord.key = personNric;
         _vapFrAlertDefRecords.Add(alertDefRecord);
+    }
+    private string convertLtaVehicleType2Vap(string ltaVehType)
+    {
+        string vapVehType = "";
+        switch (ltaVehType)
+        {
+            case "suv":
+                vapVehType = "ST_SUV";
+                break;
+            case "van":
+                vapVehType = "ST_VAN";
+                break;
+            case "big_bus":
+                vapVehType = "ST_BIG_BUS";
+                break;
+            case "small_truck":
+                vapVehType = "ST_SMALL_TRUCK";
+                break;
+            case "med_bus":
+                vapVehType = "ST_MED_BUS";
+                break;
+            case "big_truck":
+                vapVehType = "ST_BIG_TRUCK";
+                break;
+            case "hatchback":
+            case "mpv":
+            case "sedan":
+            case "passenger":
+            default:
+                vapVehType = "ST_CAR";
+                break;
+        }
+        return vapVehType;
     }
 }

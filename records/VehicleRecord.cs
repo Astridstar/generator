@@ -55,7 +55,7 @@ class VehicleRecord
         this.is_registered = "1";
         this.deregistration_dt = "";
         this.is_foreign_car = "0";
-        this.vehicle_type = convert2LocalVehicleType(vehicleType);
+        this.vehicle_type = vehicleType;
         this.color = color;
     }
     public void update(ref VehicleMakeModel genDs)
@@ -113,16 +113,5 @@ class VehicleRecord
             nameof(is_foreign_car),
             nameof(vehicle_type),
             nameof(color));
-    }
-    private string convert2LocalVehicleType(string vehicleType)
-    {
-        if (vehicleType.CompareTo("car") == 0)
-        {
-            return "passenger";
-        }
-        else
-        {
-            return "unknown";
-        }
     }
 }

@@ -5,6 +5,18 @@ using System.Text;
 
 class TblVehicleAttributeEventRecord
 {
+    public static readonly string VEH_EVENT_TYPE = "VEHICLE_ATTRIBUTE";
+    public static readonly string VA_PROVIDER_NAME = "Sensetime";
+    public static readonly string VA_ENGINE_CODE = "senseunity";
+    public static readonly string VA_TYPE_CODE = "VEHICLE";
+    public static readonly string BBOX_X1 = "886";
+    public static readonly string BBOX_Y1 = "276";
+    public static readonly string BBOX_X2 = "1093";
+    public static readonly string BBOX_Y2 = "739";
+    public static Random _rand = new Random();
+    private static float _highCfdMinValue = 0.9f;
+    private static float _highCfdMaxValue = 1.0f;
+
     public string id { get; set; }
     public string event_id { get; set; }
     public string event_type { get; set; }
@@ -160,9 +172,26 @@ class TblVehicleAttributeEventRecord
             bbox_y2
         );
         builder.AppendFormat("{0}",
-            nameof(vap_object_id)
+            vap_object_id
             );
 
         return builder.ToString();
     }
+    public static string getNextHighCfd()
+    {
+        return (_rand.NextSingle() * (_highCfdMaxValue - _highCfdMinValue) + _highCfdMinValue).ToString();
+    }
+    public static string generateFullImageUrlPrefix(DateTimeOffset eventDt, string eventId, string vaEngineCode)
+    {
+        StringBuilder builder = new();
+        builder.AppendFormat("/{0}/{1}/{2}/{3}/full/{4}", eventDt.Year, eventDt.Month, eventDt.Day, vaEngineCode, eventId);
+        return builder.ToString();
+    }
+    public static string generateCroppedImageUrlPrefix(DateTimeOffset eventDt, string eventId, string vaEngineCode)
+    {
+        StringBuilder builder = new();
+        builder.AppendFormat("/{0}/{1}/{2}/{3}/cropped/{4}", eventDt.Year, eventDt.Month, eventDt.Day, vaEngineCode, eventId);
+        return builder.ToString();
+    }
+
 }
