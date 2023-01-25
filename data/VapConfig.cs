@@ -7,4 +7,12 @@ internal class VapConfig
     public string CameraListCsv { get; init; }
     public string PersonMovementCsv { get; init; }
 
+    public VapConfig()
+    {
+        DeviceDefinitionCsv = "";
+        VapObjectConfigCsv = "";
+        CameraListCsv = "";
+        PersonMovementCsv = "";
+    }
+
 }

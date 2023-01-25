@@ -36,13 +36,44 @@ class PersonRecord
     public string child2_id { get; set; }
     public string child3_id { get; set; }
 
+    private static IdGenerator _idGenerator = new();
+
     public PersonRecord()
     {
-
+        this.sn = _idGenerator.getNextId().ToString();
+        this.gender = "";
+        this.fullname = "";
+        this.email1 = "";
+        this.email2 = "";
+        this.salutation = "";
+        this.birthday = "";
+        this.mobile = "";
+        this.phone2 = "";
+        this.fax = "";
+        this.id = "";
+        this.address1 = "";
+        this.address2 = "";
+        this.postcode = "";
+        this.citizenship = "";
+        this.nationality = "";
+        this.company = "";
+        this.company_id = "";
+        this.car_plate = "";
+        this.deceased = "";
+        this.marital = "";
+        this.father_id = "";
+        this.mother_id = "";
+        this.spouse_id = "";
+        this.sibling1_id = "";
+        this.sibling2_id = "";
+        this.sibling3_id = "";
+        this.child1_id = "";
+        this.child2_id = "";
+        this.child3_id = "";
     }
     public string toCsvFormat()
     {
-        return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},",
+        return String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},\"{11}\",{12},{13},{14},{15},\"{16}\",{17},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},",
         sn, gender, fullname, email1, email2, salutation, birthday, mobile, phone2, fax, id, address1, address2, postcode,
         citizenship, nationality,
         company, company_id,
@@ -87,7 +118,7 @@ class PersonRecord
 
     public PersonRecord(ScenarioPersonRecord data, string addr, string postal, string email1, string email2, string mobile)
     {
-        this.sn = data.sn;
+        this.sn = _idGenerator.getNextId().ToString();
         this.gender = data.gender;
         this.fullname = data.fullname;
         this.email1 = email1;

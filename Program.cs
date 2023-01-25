@@ -35,7 +35,7 @@ internal class Program
 
         Console.WriteLine($"Hello, World! {appConfig.Environment.ToString()}");
 
-        PersonDataset _personDataset = new();
+        PersonNamesDataset _personDataset = new();
         _personDataset.loadChineseNamesDataset(appConfig.ChineseNamesCsv);
         _personDataset.loadIndianNamesDataset(appConfig.IndianNamesCsv);
         _personDataset.loadMalayNamesDataset(appConfig.MalayNamesCsv);
@@ -87,7 +87,9 @@ internal class Program
                                             ref vapConfig,
                                             ref randomHumanPropDs,
                                             ref parser,
-                                            ref vehicleDs);
+                                            ref vehicleDs,
+                                            ref countryDs,
+                                            ref _personDataset);
         generator.generate(appConfig.ScenarioCsv, appConfig.ScenarioVehicleCsv);
         #endregion
         Console.WriteLine("WE ARE DONE HERE !!!! Goodbye");

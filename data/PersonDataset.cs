@@ -3,7 +3,7 @@ namespace data;
 using CsvHelper;
 using System.Globalization;
 
-internal class PersonDataset
+internal class PersonNamesDataset
 {
     IEnumerable<PersonName>? _chineseNamesDataset = null;
     IEnumerable<PersonName>? _indianNamesCsv = null;
@@ -11,6 +11,8 @@ internal class PersonDataset
 
     List<PersonName> _personNames = new List<PersonName>();
     List<FamilyConfig> _familyConfig = new List<FamilyConfig>();
+
+    Random _rand = new();
 
     public void loadChineseNamesDataset(string filename)
     {
@@ -56,7 +58,32 @@ internal class PersonDataset
 
 
     }
+    public void getRandomAvailableNameAndGender(out string name, out string gender)
+    {
+        name = "";
+        gender = "";
 
+        if (_personNames.Count <= 0)
+        {
+            Console.WriteLine("No default names configured. Unable to get name and gender");
+            return;
+        }
+
+        int i = 0;
+        var personNames = _personNames.Where(p => { i++; return p.IsAvailable; }).Select(o => o);
+
+        for (int retry = 0; retry <= 5; retry++)
+        {
+            int dice = _rand.Next(0, _personNames.Count());
+            if (_personNames[dice].IsAvailable)
+            {
+                _personNames[dice].IsAvailable = false;
+                name = _personNames[dice].Fullname;
+                gender = _personNames[dice].Gender;
+                break;
+            }
+        }
+    }
     private IEnumerable<PersonName>? load(string filename)
     {
         StreamReader reader = new StreamReader(filename);

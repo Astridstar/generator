@@ -37,6 +37,7 @@ class AddressesParser
 
         addr = addresses[_addressIndex].Address;
         postal = addresses[_addressIndex].Postal;
+        _addressIndex++;
     }
 
     public IEnumerable<AddressRecord> parse(string filename)

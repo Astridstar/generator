@@ -24,16 +24,31 @@ class VehicleRecord
         this.plate_number = plateNo;
         this.owner_nric = "";
         this.iu_number = _generator.getRandomIuNumber();
+        this.make = "";
+        this.model = "";
+        this.registration_dt = "";
+        this.is_registered = "";
+        this.deregistration_dt = "";
+        this.is_foreign_car = "";
+        this.vehicle_type = "";
+        this.color = "";
     }
     public VehicleRecord(string plateNo, string ownerId)
     {
         this.plate_number = plateNo;
         this.owner_nric = ownerId;
         this.iu_number = _generator.getRandomIuNumber();
+        this.make = "";
+        this.model = "";
+        this.registration_dt = "";
+        this.is_registered = "";
+        this.deregistration_dt = "";
+        this.is_foreign_car = "";
+        this.vehicle_type = "";
+        this.color = "";
     }
     public void update(string make, string model, string color, string vehicleType)
     {
-        //this.owner_nric = ownerId;
         this.make = make;
         this.model = model;
         this.registration_dt = _generator.randomDateTime().ToString("yyyy-MM-dd");

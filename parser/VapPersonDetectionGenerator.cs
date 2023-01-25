@@ -80,6 +80,9 @@ class VapPersonDetectionGenerator
         DateTimeOffset startdt = DateTimeOffset.Now.Subtract(new TimeSpan(10, 0, 0, 0));
         Dictionary<string, Guid> personVapObjectId = new();
 
+        if (friendlyList == null)
+            return;
+
         foreach (string nric in friendlyList)
         {
             List<StepDetails>? steps = null;

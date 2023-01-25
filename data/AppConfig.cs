@@ -91,7 +91,7 @@ namespace data
 
         public AppConfig()
         {
-
+            VapObjectConfigCsv = "";
         }
     }
 }

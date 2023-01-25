@@ -8,6 +8,13 @@ internal class PersonMovement
     public string forward_time_s { get; set; }
     public string backward_time_s { get; set; }
 
+    public PersonMovement()
+    {
+        camera_name = "";
+        forward_time_s = "";
+        backward_time_s = "";
+    }
+
 }
 
 internal class PersonMovementDatamap : ClassMap<PersonMovement>

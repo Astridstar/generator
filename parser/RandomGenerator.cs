@@ -17,11 +17,8 @@ class RandomGenerator
     }
     public RandomGenerator(DateTime startDt, DateTime endDt)
     {
-        if (startDt != null)
-            _starDt = new DateTime(startDt.Year, startDt.Month, startDt.Day);
-
-        if (_endDt != null)
-            _endDt = new DateTime(endDt.Year, endDt.Month, endDt.Day);
+        _starDt = new DateTime(startDt.Year, startDt.Month, startDt.Day);
+        _endDt = new DateTime(endDt.Year, endDt.Month, endDt.Day);
 
         _dataTimeRange = (_endDt - _starDt).Days;
     }

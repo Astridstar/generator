@@ -25,16 +25,21 @@ class ScenarioGenerator
     VapConfig _vapConfig;
     VapPersonDetectionGenerator _vapPersonDetectionGenerator;
 
+    PersonDataGenerator _personGenerator;
+
     public ScenarioGenerator(ref AppConfig appConfig, ref VapConfig vapConfig,
                             ref RandHumanPropDataset randHumanPropDs,
                             ref AddressesParser parser,
-                            ref VehicleMakeModelDataset vehicleSrcDs)
+                            ref VehicleMakeModelDataset vehicleSrcDs,
+                            ref CountryDataset countryDs,
+                            ref PersonNamesDataset personDataset)
     {
         _randHumanPropDs = randHumanPropDs;
         _addressParser = parser;
         _vehicleSrcDs = vehicleSrcDs;
         _vapConfig = vapConfig;
         _vapPersonDetectionGenerator = new();
+        _personGenerator = new(_addressParser, _randHumanPropDs, countryDs, personDataset);
     }
     private void load(string peopleFileName, string vehicleFileName)
     {
@@ -84,13 +89,14 @@ class ScenarioGenerator
 
         //3. Generate vehicle
         generateVehiclesInScenario();
-        generatePeopleVehicleRelationship();
+        //generatePeopleVehicleRelationship();
 
         //4. Generate employer
 
         //5. Generate friendly
         generateVapFriendlies();
         generateVapUnknownFriendlies();
+        generateVapFriendliesVehicle();
 
         //6. Generate blacklisted person
         //7. Generate blacklisted vehicle
@@ -174,51 +180,69 @@ class ScenarioGenerator
     }
     private void generateVehiclesInScenario()
     {
+        if (_scenarioVehicleRecords.Count <= 0)
+        {
+            Console.WriteLine("There are no vehicles specified in the scenario, i.e. actors-vehicles.csv is empty.");
+            return;
+        }
+
         // Create the vehicle records 
         foreach (ScenarioVehicleRecord scnVeh in _scenarioVehicleRecords)
         {
-            VehicleRecord record = new VehicleRecord(scnVeh.license_plate);
-            record.update(scnVeh.make, scnVeh.model, scnVeh.color, scnVeh.vehicle_class);
-            _vehicleHub.Add(record.plate_number, record);
-        }
+            VehicleRecord vehicle = new VehicleRecord(scnVeh.license_plate);
+            vehicle.update(scnVeh.make, scnVeh.model, scnVeh.color, scnVeh.vehicle_class);
 
-        // Find the people who owns vehicle and update the vehicle owner id 
-        // grab license plate set
-        var ownedVehicles = from person in _peopleHub.Values
-                            where !String.IsNullOrEmpty(person.car_plate)
-                            select (person.car_plate, person.id);
-
-        if (ownedVehicles != null && ownedVehicles.Count() > 0)
-        {
-            foreach (var veh in ownedVehicles)
+            // Check if this vehicle is configured to use randomly assigned owners
+            if (String.IsNullOrEmpty(scnVeh.use_random_owners)
+                || scnVeh.use_random_owners.CompareTo("n") == 0)
             {
-                if (_vehicleHub.ContainsKey(veh.car_plate))
-                    _vehicleHub[veh.car_plate].owner_nric = veh.id;
+                String ownerId = retrieveIdWithVehicle(vehicle.plate_number);
+                // Check if any person is owning this vehicle
+                if (String.IsNullOrEmpty(ownerId))
+                {
+                    // No actors-person in the scene has been configured to own this vehicle
+                    // Set vehicle to de-registered 
+                    vehicle.updateRegistrationState("");
+                }
+                else
+                {
+                    // Found a configured actor owning this vehicle
+                    vehicle.updateRegistrationState(ownerId);
+                }
             }
+            else
+            {
+                // Generate a person into the people's hub
+                String ownerId = "";
+                generateRandomPersonIntoPeopleHub(out ownerId);
+                // Assign the person to own this vehicle
+                vehicle.updateRegistrationState(ownerId);
+            }
+            _vehicleHub.Add(vehicle.plate_number, vehicle);
         }
     }
     private void generatePeopleVehicleRelationship()
     {
         // grab license plate set
-        var scenarioVehicles = from person in _peopleHub.Values
-                               where !String.IsNullOrEmpty(person.car_plate)
-                               select (person.car_plate, person.id);
+        // var scenarioVehicles = from person in _peopleHub.Values
+        //                        where !String.IsNullOrEmpty(person.car_plate)
+        //                        select (person.car_plate, person.id);
 
-        if (scenarioVehicles != null && scenarioVehicles.Count() > 0)
-        {
+        // if (scenarioVehicles != null && scenarioVehicles.Count() > 0)
+        // {
 
-            foreach (var veh in scenarioVehicles)
-            {
-                VehicleRecord record = new VehicleRecord(veh.car_plate, veh.id);
-                VehicleMakeModel? generatedDetails = null;
-                _vehicleSrcDs.getRandomRecord(out generatedDetails);
-                if (generatedDetails != null)
-                {
-                    record.update(ref generatedDetails);
-                }
-                _vehicleHub.Add(veh.car_plate, record);
-            }
-        }
+        //     foreach (var veh in scenarioVehicles)
+        //     {
+        //         VehicleRecord record = new VehicleRecord(veh.car_plate, veh.id);
+        //         VehicleMakeModel? generatedDetails = null;
+        //         _vehicleSrcDs.getRandomRecord(out generatedDetails);
+        //         if (generatedDetails != null)
+        //         {
+        //             record.update(ref generatedDetails);
+        //         }
+        //         _vehicleHub.Add(veh.car_plate, record);
+        //     }
+        // }
     }
     private string retrieveIdWithVehicle(string plateNo)
     {
@@ -235,6 +259,22 @@ class ScenarioGenerator
             retirevedId = "";
         }
         return retirevedId;
+    }
+    void generateRandomPersonIntoPeopleHub(out string ownerId)
+    {
+        ownerId = "";
+
+        PersonRecord? person = null;
+        _personGenerator.generateRandomPerson(out person);
+        if (person == null)
+        {
+            Console.WriteLine("Problem creating random person");
+        }
+        else
+        {
+            ownerId = person.id;
+            _peopleHub.Add(person.id, person);
+        }
     }
     private void generateDefaltPeopleRecords()
     {
@@ -259,6 +299,11 @@ class ScenarioGenerator
     private void generateVapUnknownFriendlies()
     {
         _vapPersonDetectionGenerator.generateUnknownFriendlies();
+    }
+
+    public void generateVapFriendliesVehicle()
+    {
+
     }
     private void generatePeopleHubCsv()
     {

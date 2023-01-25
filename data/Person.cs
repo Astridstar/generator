@@ -2,31 +2,32 @@ using CsvHelper.Configuration;
 
 namespace data
 {
-    internal class PersonName {
-        
+    internal class PersonName
+    {
+
         private string _surname = "";
-        private string _name= "";
+        private string _name = "";
         private string _fullname = "";
         private string _gender = "";
-        private bool _isAvailable = false;
+        private bool _isAvailable = true;
 
-        public string Surname 
-        { 
+        public string Surname
+        {
             get => _surname;
             set => _surname = value;
         }
-        public string Name 
-        { 
+        public string Name
+        {
             get => _name;
             set => _name = value;
         }
-        public string Fullname 
-        { 
+        public string Fullname
+        {
             get => _fullname;
             set => _fullname = value;
         }
-        public string Gender 
-        { 
+        public string Gender
+        {
             get => _gender;
             set => _gender = value;
         }
@@ -42,7 +43,7 @@ namespace data
     {
         public PersonMap()
         {
-            Map(p => p.Surname).Index(0); 
+            Map(p => p.Surname).Index(0);
             Map(p => p.Name).Index(1);
             Map(p => p.Fullname).Index(2);
             Map(p => p.Gender).Index(3);

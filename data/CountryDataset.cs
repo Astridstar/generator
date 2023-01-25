@@ -22,4 +22,14 @@ internal class CountryDataset
         }
 
     }
+    public string ElementAt(int index)
+    {
+        if (_countries == null || _countries.Count() <= index) return "";
+
+        return _countries.ElementAt(index);
+    }
+    public int getMaxCountryRecord()
+    {
+        return _countries == null ? -1 : _countries.Count();
+    }
 }
