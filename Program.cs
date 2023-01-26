@@ -62,7 +62,7 @@ internal class Program
         #region Loading Acra information
         ArcaDataset arcaDs = new();
         arcaDs.load(appConfig.AcraDataCsv);
-        #endregion        
+        #endregion    
 
         // Load the address
         #region Loading and generating Addresses
@@ -82,6 +82,8 @@ internal class Program
             Console.WriteLine(e);
         }
         #endregion
+
+        DateTimeOffset dto = vapConfig.getScenarioOccuranceDateTime();
 
         #region Load scenario and gen data
         ScenarioGenerator generator = new(ref appConfig,

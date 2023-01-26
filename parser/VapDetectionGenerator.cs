@@ -15,6 +15,9 @@ partial class VapDetectionGenerator
     List<TblVehicleAttributeEventRecord> _vapVehicleAttributeRecords = new();
     List<FrEventDefRecord> _vapFrEventDefRecords = new();
     List<FrAlertDefRecord> _vapFrAlertDefRecords = new();
+    DateTimeOffset _eventStartDate = DateTimeOffset.Now.Subtract(new TimeSpan(10, 0, 0, 0));
+    int _noOfDaysOfVapRecords = 10;
+
     public VapDetectionGenerator()
     {
     }
@@ -22,10 +25,22 @@ partial class VapDetectionGenerator
     {
         try
         {
+            _eventStartDate = vapConfig.getScenarioOccuranceDateTime();
             _vapConfigDs.load(vapConfig.VapObjectConfigCsv);
             _personMovementDs.load(vapConfig.PersonMovementCsv);
             _deviceDefinitionDs.load(vapConfig.DeviceDefinitionCsv);
             _vehicleMovementDs.load(vapConfig.VehicleMovementCsv);
+
+            _noOfDaysOfVapRecords = 10; // Default to 10 days of records
+            if (!String.IsNullOrEmpty(vapConfig.NumberOfDaysOfVapRecords))
+            {
+                string sNoOfDaysOfRecords = vapConfig.NumberOfDaysOfVapRecords;
+                int count = 0;
+                if (Int32.TryParse(sNoOfDaysOfRecords, out count))
+                {
+                    _noOfDaysOfVapRecords = count;
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -62,7 +77,7 @@ partial class VapDetectionGenerator
     }
     public void generateFriendliesInNeighborhood(IEnumerable<string>? friendlyList)
     {
-        DateTimeOffset startdt = DateTimeOffset.Now.Subtract(new TimeSpan(10, 0, 0, 0));
+        DateTimeOffset startdt = _eventStartDate;
         Dictionary<string, Guid> personVapObjectId = new();
 
         if (friendlyList == null)
@@ -114,7 +129,7 @@ partial class VapDetectionGenerator
         }
 
         Guid vapObjectId = Guid.NewGuid();
-        DateTimeOffset startdt = DateTimeOffset.Now.Subtract(new TimeSpan(10, 0, 0, 0));
+        DateTimeOffset startdt = _eventStartDate;
         // Generate tbl_person_attribute_event records
         // Now grab those dynamic variables per detection/step in the 
         // tbl_person_attribute_event record to be generated
@@ -137,7 +152,7 @@ partial class VapDetectionGenerator
     }
     public void generateFriendliesVehicleiInNeighborhood(IEnumerable<VehicleDetails>? friendlyList)
     {
-        DateTimeOffset startdt = DateTimeOffset.Now.Subtract(new TimeSpan(10, 0, 0, 0));
+        DateTimeOffset startdt = _eventStartDate;
         Dictionary<string, Guid> vehicleVapObjectId = new();
         if (friendlyList == null)
             return;
@@ -163,7 +178,7 @@ partial class VapDetectionGenerator
 
         steps = new();
         DateTimeOffset startingDt = srcstartdt;
-        for (int dailyOccurrence = 0; dailyOccurrence < 10; dailyOccurrence++)
+        for (int dailyOccurrence = 0; dailyOccurrence < _noOfDaysOfVapRecords; dailyOccurrence++)
         {
             startingDt = srcstartdt.AddDays(dailyOccurrence);
             for (int i = 0; i < movementDs.VapObjectMovementList.Count; i++)
