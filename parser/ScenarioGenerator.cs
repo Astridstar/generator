@@ -14,18 +14,14 @@ class ScenarioGenerator
     Dictionary<string, VehicleRecord> _vehicleHub = new();
     List<ScenarioPersonRecord> _scenarioPersonRecords = new();
     List<ScenarioVehicleRecord> _scenarioVehicleRecords = new();
-
     IEnumerable<string>? _scenarioIdWithFamilies;
-
     AddressesParser _addressParser;
-
     RandHumanPropDataset _randHumanPropDs;
     VehicleMakeModelDataset _vehicleSrcDs;
-
     VapConfig _vapConfig;
     VapDetectionGenerator _vapDetectionGenerator;
-
     PersonDataGenerator _personGenerator;
+    BusinessGenerator _businessGenerator;
 
     public ScenarioGenerator(ref AppConfig appConfig, ref VapConfig vapConfig,
                             ref RandHumanPropDataset randHumanPropDs,
@@ -40,6 +36,7 @@ class ScenarioGenerator
         _vapConfig = vapConfig;
         _vapDetectionGenerator = new();
         _personGenerator = new(_addressParser, _randHumanPropDs, countryDs, personDataset);
+        _businessGenerator = new(appConfig.AcraDataCsv);
     }
     private void load(string peopleFileName, string vehicleFileName)
     {
@@ -89,6 +86,7 @@ class ScenarioGenerator
         //3. Generate vehicle
         generateVehiclesInScenario();
         //4. Generate employer
+        generateBusinessesInScenario();
         //5. Generate friendly person
         generateVapFriendlies();
         generateVapUnknownFriendlies();
@@ -103,7 +101,13 @@ class ScenarioGenerator
         // Now generate the CSV data
         generatePeopleHubCsv(); // ICA PeopleHub
         generateVehicleHubCsv(); // LTA VehicleHub
-        generateVapCsv();
+
+        _vapDetectionGenerator.generateCsv(@Program.VAP_PERSON_ATTRIBUTE_EVENT_CSV_FULLPATH_FILE,
+                                                 @Program.VAP_VEHICLE_ATTRIBUTE_EVENT_CSV_FULLPATH_FILE,
+                                                 @Program.VAP_FR_EVENT_CSV_FULLPATH_FILE,
+                                                 @Program.VAP_FR_ALERT_CSV_FULLPATH_FILE);
+
+        _businessGenerator.generateCsv(@Program.ACRA_CSV_FULLPATH_FILE);
         return true;
     }
 
@@ -296,11 +300,18 @@ class ScenarioGenerator
                 writer.WriteLine(record.toCsvFormat());
         }
     }
-    private void generateVapCsv()
+
+    public void generateBusinessesInScenario()
     {
-        _vapDetectionGenerator.generateCsv(@Program.VAP_PERSON_ATTRIBUTE_EVENT_CSV_FULLPATH_FILE,
-                                                 @Program.VAP_VEHICLE_ATTRIBUTE_EVENT_CSV_FULLPATH_FILE,
-                                                 @Program.VAP_FR_EVENT_CSV_FULLPATH_FILE,
-                                                 @Program.VAP_FR_ALERT_CSV_FULLPATH_FILE);
+        foreach (ScenarioPersonRecord personRecord in _scenarioPersonRecords)
+        {
+            if (!String.IsNullOrEmpty(personRecord.employer))
+            {
+                string addr = "";
+                string postal = "";
+                this._addressParser.getNextAddress(out addr, out postal);
+                this._businessGenerator.generateBusinessEntity(personRecord.employer, 1, addr, postal);
+            }
+        }
     }
 }

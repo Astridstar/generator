@@ -16,6 +16,8 @@ internal class Program
     public static readonly string VAP_VEHICLE_ATTRIBUTE_EVENT_CSV_FULLPATH_FILE = @"./config/generated/tbl_vehicle_attribute_event.csv";
     public static readonly string VAP_FR_EVENT_CSV_FULLPATH_FILE = @"./config/generated/fr_event.csv";
     public static readonly string VAP_FR_ALERT_CSV_FULLPATH_FILE = @"./config/generated/fr_alert.csv";
+    public static readonly string ACRA_CSV_FULLPATH_FILE = @"./config/generated/acra.csv";
+    public static readonly string EMPLOYER_CSV_FULLPATH_FILE = @"./config/generated/mom_employer.csv";
 
     private static void Main(string[] args)
     {
