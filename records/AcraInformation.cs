@@ -256,7 +256,7 @@ class AcraInformation : AcraInformationData
             other_address_line2,
             account_due_date
         );
-        builder.AppendFormat("{0},{1},{2},\"{3}\",\"{4}\",{5},\"{6}\",{7},{8},{9},",
+        builder.AppendFormat("{0},{1},{2},\"{3}\",\"{4}\",{5},\"{6}\",\"{7}\",{8},{9},",
             annual_return_date,
             no_of_charges,
             primary_ssic_code,

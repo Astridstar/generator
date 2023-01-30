@@ -107,7 +107,7 @@ class ScenarioGenerator
                                                  @Program.VAP_FR_EVENT_CSV_FULLPATH_FILE,
                                                  @Program.VAP_FR_ALERT_CSV_FULLPATH_FILE);
 
-        _businessGenerator.generateCsv(@Program.ACRA_CSV_FULLPATH_FILE);
+        _businessGenerator.generateCsv(@Program.ACRA_CSV_FULLPATH_FILE, @Program.EMPLOYER_CSV_FULLPATH_FILE);
         return true;
     }
 
@@ -305,12 +305,35 @@ class ScenarioGenerator
     {
         foreach (ScenarioPersonRecord personRecord in _scenarioPersonRecords)
         {
-            if (!String.IsNullOrEmpty(personRecord.employer))
+            if (String.IsNullOrEmpty(personRecord.employer))
+                continue;
+
+            string addr = "";
+            string postal = "";
+            this._addressParser.getNextAddress(out addr, out postal);
+            string uen = this._businessGenerator.generateBusinessEntity(personRecord.employer, 1, addr, postal);
+
+            if (!String.IsNullOrEmpty(personRecord.business_partner))
             {
-                string addr = "";
-                string postal = "";
-                this._addressParser.getNextAddress(out addr, out postal);
-                this._businessGenerator.generateBusinessEntity(personRecord.employer, 1, addr, postal);
+                // I am using presence of a business partner to determine if 
+                // the person is the owner of the business.  By right there should 
+                // be a separate flag to indicate business owners.  To be updated
+                // when time permits
+                _businessGenerator.generateBusinessEntityOwnerships(uen, personRecord.id, personRecord.fullname);
+
+                try
+                {
+                    string id = _peopleHub.Values.Where(x => !String.IsNullOrEmpty(x.fullname) && x.fullname.CompareTo(personRecord.business_partner) == 0).Select(x => x.id).Single();
+                    _businessGenerator.generateBusinessEntityPartnerships(uen, id, personRecord.business_partner);
+                }
+                catch (ArgumentNullException)
+                {
+                    Console.WriteLine("Unable to find person in People's hub with fullname {0}.", personRecord.business_partner);
+                }
+                catch (InvalidOperationException)
+                {
+                    Console.WriteLine("Found duplicate records of person in People's hub with fullname {0}.", personRecord.business_partner);
+                }
             }
         }
     }
