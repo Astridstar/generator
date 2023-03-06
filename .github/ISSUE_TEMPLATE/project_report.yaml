@@ -1,5 +1,5 @@
-name: Bug Report
-description: File a bug report
+name: My Project Bug Report
+description: File a bug report for my project
 title: "[Bug]: "
 labels: ["bug", "triage"]
 assignees:
