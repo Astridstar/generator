@@ -27,6 +27,15 @@ body:
     validations:
       required: true
   - type: dropdown
+    id: priority
+    attributes: 
+      label: Priority
+      description: Defines the priority of the issue (1-highest, 2-moderate, 3-low)
+      options:
+        - 1
+        - 2
+        - 3 (Default)
+  - type: dropdown
     id: version
     attributes:
       label: Version
