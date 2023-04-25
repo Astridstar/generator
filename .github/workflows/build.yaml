@@ -10,7 +10,7 @@ on:
 
 jobs:
   Scan:
-    uses: Astridstar/github_workflows/codeql.yml@latest
+    uses: Astridstar/github_workflows/.github/workflows/codeql.yml@latest
 
   Build:
     environment: UAT
