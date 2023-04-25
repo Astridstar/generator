@@ -1,9 +1,11 @@
 name: Build Data Generator
 
 on:
-  push:
-    branches: [main]
+  # push:
+  #   branches: [main]
   pull_request:
+    types:
+      - synchronize
     branches: [main]
   workflow_dispatch:
 
