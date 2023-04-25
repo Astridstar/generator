@@ -9,9 +9,13 @@ on:
 
 
 jobs:
+  Scan:
+    uses: Astridstar/github_workflows/codeql.yml
+
   Build:
     environment: UAT
     runs-on: ubuntu-latest
+    needs: Scan
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
