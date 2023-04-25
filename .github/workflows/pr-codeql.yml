@@ -2,7 +2,7 @@ name: "CodeQL on PR opened"
 
 on:
   pull_request:
-    types: [opened, reopened]
+    # types: [opened, reopened]
     branches: [ "main" ]
 
 jobs:
