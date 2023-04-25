@@ -19,7 +19,7 @@ jobs:
       - name: Setup dotnet environment
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 7.0
+          dotnet-version: 7.*
 
       - name: Install dependencies
         run: dotnet restore
