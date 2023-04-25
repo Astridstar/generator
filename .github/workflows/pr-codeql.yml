@@ -6,7 +6,7 @@ on:
     branches: [ "main" ]
   push:
     branches:
-      - "development"
+      - development
 jobs:
   analyze:
     name: Analyze
