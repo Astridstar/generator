@@ -4,7 +4,9 @@ on:
   pull_request:
     #types: [opened, reopened]
     branches: [ "main" ]
-
+  push:
+    branches:
+      - development
 jobs:
   analyze:
     name: Analyze
