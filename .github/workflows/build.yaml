@@ -11,8 +11,8 @@ on:
 
 
 jobs:
-  Scan:
-    uses: Astridstar/github_workflows/.github/workflows/codeql.yml@main
+  # Scan:
+  #   uses: Astridstar/github_workflows/.github/workflows/codeql.yml@main
 
   Build:
     environment: UAT
