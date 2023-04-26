@@ -31,7 +31,7 @@ jobs:
   run_echo:
     runs-on: ubuntu-latest
     steps:
-      - run: sleep 15s
+      - run: exit 2
   # Scan:
   #   uses: Astridstar/github_workflows/.github/workflows/codeql.yml@main
 
