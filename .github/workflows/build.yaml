@@ -14,14 +14,14 @@ on:
 jobs:
   Build_UAT:
     if: (github.event.pull_request.merged == true && github.ref_name == 'main')
-    uses: Astridstar/github_workflows/.github/workflows/ci.yml@main
+    uses: Astridstar/github_workflows/.github/workflows/ci.yaml@main
     with:
       env: UAT
       positive_route: true
 
   Build_Development:
     if: github.ref_name == 'development'
-    uses: Astridstar/github_workflows/.github/workflows/ci.yml@main
+    uses: Astridstar/github_workflows/.github/workflows/ci.yaml@main
     with:
       env: 'development'
       positive_route: true
