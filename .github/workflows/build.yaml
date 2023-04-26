@@ -11,30 +11,42 @@ on:
       - main
   workflow_dispatch:
 
-
 jobs:
+  Build_UAT:
+    if: (github.event.pull_request.merged == true && github.ref_name == 'main')
+    uses: Astridstar/github_workflows/.github/workflows/ci.yml@main
+    with:
+      env: UAT
+      positive_route: true
+
+  Build_Development:
+    if: github.ref_name == 'development'
+    uses: Astridstar/github_workflows/.github/workflows/ci.yml@main
+    with:
+      env: 'development'
+      positive_route: true
+
   # Scan:
   #   uses: Astridstar/github_workflows/.github/workflows/codeql.yml@main
 
-  Build_UAT:
-    runs-on: ubuntu-latest
-    if: (github.event.pull_request.merged == true && github.ref_name == 'main')
-    environment: UAT
-    steps:
-      - uses: Astridstar/github_workflows/.github/workflows/ci.yml@main
-        with:
-          env: UAT
-          positive_route: true
+  #Build_UAT:
+    #if: (github.event.pull_request.merged == true && github.ref_name == 'main')
+    #runs-on: ubuntu-latest
+    #environment: UAT
+    #uses: Astridstar/github_workflows/.github/workflows/ci.yml@main
+    #  with:
+    #    env: UAT
+    #    positive_route: true
           
-  Build_Development:
-    runs-on: ubuntu-latest
-    if: github.ref_name == 'development'
-    environment: development
-    steps:
-      - uses: Astridstar/github_workflows/.github/workflows/ci.yml@main
-        with:
-          env: 'development'
-          positive_route: true
+  # Build_Development:
+  #   runs-on: ubuntu-latest
+  #   if: github.ref_name == 'development'
+  #   environment: development
+  #   steps:
+  #     - uses: Astridstar/github_workflows/.github/workflows/ci.yml@main
+  #       with:
+  #         env: 'development'
+  #         positive_route: true
 
       # - name: Create Pull Request
       #   if: ${{ github.ref_name == 'main' }}
