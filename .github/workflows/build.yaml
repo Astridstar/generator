@@ -14,6 +14,7 @@ on:
 jobs:
   Build_UAT:
     #if: (github.event.pull_request.merged == true && github.ref_name == 'main')
+    needs: run_echo
     if: github.ref_name == 'main'
     uses: Astridstar/github_workflows/.github/workflows/ci.yaml@main
     with:
