@@ -7,7 +7,7 @@ on:
     branches:
       - '**'
       # - '!main'
-
+   
 jobs:
   Scan:
     uses: Astridstar/github_workflows/.github/workflows/codeql.yml@main
