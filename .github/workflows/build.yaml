@@ -27,6 +27,10 @@ jobs:
       env: 'development'
       positive_route: true
 
+  run_echo:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo hello
   # Scan:
   #   uses: Astridstar/github_workflows/.github/workflows/codeql.yml@main
 
