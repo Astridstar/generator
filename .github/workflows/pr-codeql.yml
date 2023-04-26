@@ -5,9 +5,9 @@ on:
     types: [opened, reopened]
   push:
     branches:
-      - '**'
-      # - '!main'
-
+      - main
+      - development
+   
 jobs:
   Scan:
     uses: Astridstar/github_workflows/.github/workflows/codeql.yml@main
