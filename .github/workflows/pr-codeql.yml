@@ -5,8 +5,8 @@ on:
     types: [opened, reopened]
   push:
     branches:
-      - '**'
-      # - '!main'
+      - main
+      - development
    
 jobs:
   Scan:
