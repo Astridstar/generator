@@ -21,7 +21,7 @@ jobs:
 
   Build_Development:
     if: github.ref_name == 'development'
-    uses: Astridstar/github_workflows/.github/workflows/ci.yaml
+    uses: Astridstar/github_workflows/.github/workflows/ci.yaml@main
     with:
       env: 'development'
       positive_route: true
