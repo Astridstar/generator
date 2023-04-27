@@ -12,14 +12,14 @@ public class UnitTest1
     [Fact]
     public void case_1()
     {
-        Assert.Equal( true, getTestState(1));
+        Assert.True(getTestState(1));
     }
 
 
     [Fact]
     public void case_2()
     {
-        Assert.Equal( true, getTestState(2));
+        Assert.True(getTestState(2));
     }
 
     public bool getTestState(int caseNo)
