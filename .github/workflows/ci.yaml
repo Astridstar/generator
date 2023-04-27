@@ -60,7 +60,9 @@ jobs:
       - name: Get release version
         id: get-release-version
         run: |
-          echo "version=$(jq -r .next_version versioning.json)" >> $GITHUB_OUTPUT  
+          cd ${{ github.workspace }}
+          ls -la
+          echo "version=$(jq -r .next_version ./versioning.json)" >> $GITHUB_OUTPUT  
 
       - name: gh create release
         run: echo ${{ steps.run-get-release-version.version }}
