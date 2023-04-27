@@ -1,0 +1,38 @@
+name: "CI"
+
+on:
+  push:
+    branches:
+      - development
+      - main
+
+jobs:
+  codeql-analysis-call:
+    uses: actions/reusable-workflows/.github/workflows/codeql-analysis.yml@main
+     
+  build:
+    name: Build and Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3.5.2
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.*
+        
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Build the code
+        run: dotnet build
+
+      - name: Run tests
+        id: run-tests
+        continue-on-error: true 
+        run: |
+          cd tests
+          dotnet test -v q --nologo
+

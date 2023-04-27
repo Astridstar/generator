@@ -5,10 +5,10 @@ on:
   #   types:
   #     - closed
   #   branches: [main]
-  push:
-    branches:
-      - development
-      - main
+  # push:
+  #   branches:
+  #     - development
+  #     - main
   workflow_dispatch:
 
 jobs:
