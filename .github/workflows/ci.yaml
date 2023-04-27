@@ -51,5 +51,18 @@ jobs:
           exclude-workflow-initiator-as-approver: false
           additional-approved-words: ''
           additional-denied-words: ''        
-      
+    
+  release:
+    name: Create release 
+    runs-on: ubuntu-latest
+    if: ${{ github.ref_name == 'main' }}
+    steps:
+      - name: Get release version
+        id: get-release-version
+        run: |
+          echo "version=$(jq -r .next_version versioning.json)" >> $GITHUB_OUTPUT  
+
+      - name: gh create release
+        run: echo ${{ steps.run-get-release-version.version }}
+         
 
