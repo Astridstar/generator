@@ -41,10 +41,10 @@ jobs:
           approvers: Astridstar
           minimum-approvals: 1
           issue-title: "Deploying v1.3.5 to prod from staging"
-          issue-body: "There are errors in the tests.  Please approve or deny the deployment of version v1.3.5."
+          issue-body: "There are errors in the unit test.  Do you want to continue with the deployment? Please approve or deny the deployment of version v1.3.5."
           exclude-workflow-initiator-as-approver: false
-          additional-approved-words: ''
-          additional-denied-words: ''        
+          additional-approved-words: 'yes'
+          additional-denied-words: 'no'        
     
   release:
     name: Create release 
@@ -62,7 +62,5 @@ jobs:
 
       - name: gh create release
         run: |
-          ls -la
-          echo ${{ steps.run-get-release-version.version }}
-         
-
+          echo ${{ steps.get-release-version.outputs.version }}
+          gh release create ${{ steps.get-release-version.outputs.version }} --generate-notes
