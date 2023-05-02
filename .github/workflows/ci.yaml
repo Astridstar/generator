@@ -55,12 +55,12 @@ jobs:
           additional-denied-words: 'no'   
 
       - name: Preparing artifacts
+        if: ${{ github.ref_name == 'main' }}
         run: |
-          ls -la
-          echo "workspace value:" ${{ github.workspace }}
           tar -cvf datagen.tar ${{ github.workspace }}/bin/Debug/net7.0
 
       - uses: actions/upload-artifact@v3
+        if: ${{ github.ref_name == 'main' }}
         with:
           name: datagen.tar
           path: ${{ github.workspace }}/datagen.tar
