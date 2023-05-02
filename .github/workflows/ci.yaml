@@ -22,7 +22,6 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.*
-        https://github.com/Astridstar/generator.git
 
       - name: Run tests
         id: run-tests
