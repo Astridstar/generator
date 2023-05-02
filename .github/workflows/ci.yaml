@@ -22,12 +22,6 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.*
-        
-      - name: Install dependencies
-        run: dotnet restore
-
-      - name: Build the code
-        run: dotnet build
 
       - name: Run tests
         id: run-tests
@@ -67,6 +61,8 @@ jobs:
           jq -r .next_version ./versioning.json
 
       - name: gh create release
-        run: echo ${{ steps.run-get-release-version.version }}
+        run: |
+          ls -la
+          echo ${{ steps.run-get-release-version.version }}
          
 
