@@ -51,6 +51,8 @@ jobs:
 
       - name: Preparing artifacts
         run: |
+          ls -la
+          echo "workspace value:" ${{ github.workspace }}
           tar -cvf datagen.tar ${{ github.workspace }}/bin/Debug/net7.0
 
       - uses: actions/upload-artifact@v3
