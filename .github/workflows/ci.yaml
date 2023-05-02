@@ -49,7 +49,7 @@ jobs:
   release:
     name: Create release 
     runs-on: ubuntu-latest
-    if: ${{ github.ref_name == 'main' }}
+    #if: ${{ github.ref_name == 'main' }}
     steps:
       - uses: actions/checkout@v3.5.2
       - name: Get release version
@@ -63,6 +63,6 @@ jobs:
       - name: gh create release
         run: |
           ls -la
-          echo ${{ steps.run-get-release-version.version }}
+          echo ${{ steps.get-release-version.outputs.version }}
          
 
