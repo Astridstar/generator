@@ -1,0 +1,21 @@
+name: Sanitize artifacts created before deployment
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  Sanitize:
+    runs-on: ubuntu-latest
+    environment: UAT
+    steps:
+      -  run: echo "Helo"
+  # Sanitize:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Download artifacts
+  #       uses: action/download
+
+  # Deployment_with_errors:
+  #   environment: UAT
+  #   runs-on: ubuntu-latest
