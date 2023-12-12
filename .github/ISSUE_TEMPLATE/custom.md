@@ -6,7 +6,7 @@ labels: ''
 assignees: ''
 Project: ''
 Sprint: ''
-
+projects: ["Astridstar/generator"]
 ---
 
 
