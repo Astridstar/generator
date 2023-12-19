@@ -1,0 +1,84 @@
+name: "Generate provenance"
+
+on:
+  push:
+    branches:
+      - development
+      - main
+
+jobs:
+    build:
+        name: Build and Tests
+        runs-on: airy-1
+        outputs:
+            subjects-as-file: ${{ steps.hashes.outputs.handle }}
+    
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v3.5.2
+
+        - name: Setup dotnet
+          uses: actions/setup-dotnet@v3
+          with:
+            dotnet-version: 7.*
+        
+        - name: Build artifacts
+          run: |
+            dotnet restore
+            dotnet build
+
+        - name: Run tests
+          id: run-tests
+          continue-on-error: true 
+          run: |
+            cd tests
+            dotnet restore
+            dotnet test -v q --nologo
+            tar -cvf datagen.tar ${{ github.workspace }}/bin/Debug/net7.0
+
+        - name: Generate hashes
+          shell: bash
+          id: hash
+          run: |
+            # sha256sum generates sha256 hash for all artifacts.
+            # base64 -w0 encodes to base64 and outputs on a single line.
+            # sha256sum artifact1 artifact2 ... | base64 -w0
+            echo "hashes=$(sha256sum datagen.tar | base64 -w0)" >> "$GITHUB_OUTPUT"
+        
+        - name: Upload data generator artifact
+          uses: actions/upload-artifact@v3
+          with:
+            name: artifact1
+            path: ${{ github.workspace }}/datagen.tar
+            if-no-files-found: error
+            retention-days: 5
+        
+    # This step calls the generic workflow to generate provenance.
+    provenance:
+        needs: [build]
+        permissions:
+            actions: read
+            id-token: write
+            contents: write
+        uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.9.0
+        with:
+            base64-subjects: "${{ needs.build.outputs.hashes }}"
+            # Upload provenance to a new release
+            upload-assets: true
+    
+    # This step uploads our artifacts to the tagged GitHub release.
+    release:
+        needs: [build, provenance]
+        runs-on: ubuntu-latest
+        if: startsWith(github.ref, 'refs/tags/')
+        steps:
+            - name: Download artifact1
+              uses: actions/download-artifact@fb598a63ae348fa914e94cd0ff38f362e927b741 # tag=v2.1.0
+              with:
+                name: artifact1
+
+            - name: Upload assets
+              uses: softprops/action-gh-release@1e07f4398721186383de40550babbdf2b84acfc5 # v0.1.14
+              with:
+                files: |
+                    artifact1
